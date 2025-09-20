@@ -1,11 +1,24 @@
 package CSCI_841_Project.backend.mapper;
 
 import CSCI_841_Project.backend.dto.UserDTO;
+import CSCI_841_Project.backend.entity.Role;
 import CSCI_841_Project.backend.entity.User;
+import CSCI_841_Project.backend.enums.RoleType;
+import CSCI_841_Project.backend.exception.NotFoundException;
+import CSCI_841_Project.backend.repository.RoleRepository;
+import CSCI_841_Project.backend.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class UserMapper {
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     /**
      * Convert User entity to UserDTO.
@@ -59,6 +72,7 @@ public class UserMapper {
         user.setPreferredLanguage(userDTO.getPreferredLanguage());
         user.setDeleted(userDTO.isDeleted());
         user.setVerified(userDTO.isVerified());
+
         user.setDateCreated(userDTO.getDateCreated());
         user.setDateUpdated(userDTO.getDateUpdated());
         return user;

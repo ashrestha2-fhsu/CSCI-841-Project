@@ -1,5 +1,6 @@
 package CSCI_841_Project.backend.entity;
 
+import CSCI_841_Project.backend.enums.RoleType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -122,13 +123,19 @@ public class User {
     @Column(name = "last_login")
     private LocalDateTime lastLogin = LocalDateTime.now();
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY) // ← avoid EAGER; load via fetch-join or EntityGraph
     @JoinTable(
-            name = "user_roles",  // ✅ Join table to handle M:N relation
+            name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
+            inverseJoinColumns = @JoinColumn(name = "role_id"),
+            uniqueConstraints = @UniqueConstraint(name = "uk_user_role", columnNames = {"user_id","role_id"})
     )
-    private Set<Role> roles = new HashSet<>();
+    private Set<Role> roles = new java.util.LinkedHashSet<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "primary_role_id")
+    private Role primaryRole;
+
 
     /**
      * Timestamp for when the user was created.
@@ -169,4 +176,5 @@ public class User {
     // CONSTRUCTOR
 
     // GETTER AND SETTER
+
 }

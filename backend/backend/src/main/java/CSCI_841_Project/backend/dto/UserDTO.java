@@ -1,8 +1,11 @@
 package CSCI_841_Project.backend.dto;
 
+import CSCI_841_Project.backend.entity.Role;
+import CSCI_841_Project.backend.enums.RoleType;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,6 +29,7 @@ public class UserDTO {
     private String preferredLanguage;
     private boolean isDeleted;
     private boolean isVerified;
+    private Set<RoleType> roles;
     private LocalDateTime lastLogin;
     private LocalDateTime dateCreated;
     private LocalDateTime dateUpdated;

@@ -2,22 +2,21 @@ package CSCI_841_Project.backend.entity;
 
 import CSCI_841_Project.backend.enums.RolePermission;
 import CSCI_841_Project.backend.enums.RoleType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 
 @Entity
-@Table(name = "roles")
+@Table(name = "roles", uniqueConstraints=@UniqueConstraint(name="uk_role_name", columnNames="role_name"))
 public class Role {
 
     @Id
@@ -31,12 +30,36 @@ public class Role {
     @Column(name = "description")
     private String description;
 
-    @ElementCollection(fetch = FetchType.EAGER)  // ✅ Permissions stored separately
+    @ElementCollection(targetClass = RolePermission.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "role_permissions", joinColumns = @JoinColumn(name = "role_id"))
     @Enumerated(EnumType.STRING)
-    private Set<RolePermission> permissions = new HashSet<>();
+    @Column(name = "permission")
+    private Set<RolePermission> permissions = EnumSet.noneOf(RolePermission.class);
 
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)  // Many roles per user
+    @JsonIgnore
     private Set<User> users = new HashSet<>();
+
+    // CONSTRUCTOR
+    protected Role() {} // JPA needs this
+
+    public Role(RoleType roleName, String description, Set<RolePermission> permissions) {
+        this.roleName = roleName;
+        this.description = description;
+        this.permissions = permissions;
+    }
+
+
+    // equals/hashCode by business key so Set<Role> de-dupes properly
+    @Override
+    public boolean equals(Object o){
+        if (this == o) return true;
+        if (!(o instanceof Role r)) return false;
+        return roleName == r.roleName;
+    }
+
+    @Override
+    public int hashCode(){ return Objects.hash(roleName); }
 
 
     @Override
@@ -48,12 +71,11 @@ public class Role {
                 '}';
     }
 
-    public Long getRoleId() {
-        return roleId;
-    }
-
-
-    // CONSTRUCTOR
 
     // GETTER AND SETTER
+
+
+
+
+
 }

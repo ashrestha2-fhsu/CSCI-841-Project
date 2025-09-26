@@ -5,7 +5,7 @@ import axios from 'axios'
 const Register: React.FC = () => {
   const navigate = useNavigate()
   const [user, setUser] = useState({
-    username: "",
+    userName: "",
     email: "",
     password: "",
     firstName: "",
@@ -43,7 +43,7 @@ const Register: React.FC = () => {
 
       // Clear form fields
       setUser({
-        username: "",
+        userName: "",
         email: "",
         password: "",
         firstName: "",
@@ -90,8 +90,8 @@ const Register: React.FC = () => {
                   <input
                     type="text"
                     id="username"
-                    name="username"
-                    value={user.username}
+                    name="userName"
+                    value={user.userName}
                     onChange={handleChange}
                     className="form-input"
                     required

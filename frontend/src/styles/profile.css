@@ -1,0 +1,96 @@
+/* Profile Picture & Upload - Align on the Same Line */
+.profile-upload-container {
+  display: flex;
+  align-items: center;
+  gap: 20px; /* Space between elements */
+  justify-content: center; /* Center elements */
+  margin-bottom: 10px;
+  padding: 0 5px;
+  color: #222;
+}
+
+/* Profile Image */
+.profile-upload-container img {
+  width: 40px; /* Adjust size */
+  height: 40px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* File Input */
+.profile-upload-container input[type="file"] {
+  flex-grow: 1; /* Allow file input to expand */
+  max-width: 200px; /* Set a max width */
+}
+
+/* Upload Button */
+.profile-upload-container button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.profile-upload-container button:hover {
+  background-color: #0056b3;
+}
+
+/* Profile Modal */
+.profile-modal {
+  max-width: 90%;
+  background: #dbd7a6;
+  padding: 20px;
+  width: 450px;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  position: relative;
+  color: #333;
+}
+
+/* Close Button (X) */
+.close-btn.btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: red;
+  color: white;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 50%;
+}
+
+/* Input Fields */
+.profile-modal input,
+.profile-modal select {
+  width: 100%;
+  padding: 8px;
+  margin: 10px 0;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Buttons */
+.profile-modal button {
+  padding: 10px;
+  background: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.profile-modal button:hover {
+  background: #0056b3;
+}
+
+.edit-profile {
+  padding-bottom: 15px;
+  margin-top: 5px;
+}

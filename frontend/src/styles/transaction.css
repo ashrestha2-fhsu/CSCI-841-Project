@@ -1,0 +1,148 @@
+/* TRANSACTION DASHBOARD CSS  ++++++++++++++++++++++++++++++++++++++++++++++ */
+.transaction-page {
+  padding: 20px, 0 20px, 0;
+}
+
+.transaction-page-header {
+  margin-bottom: 20px;
+}
+
+.transaction-filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.transaction-filters input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.transaction-summary {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-bottom: 25px;
+}
+
+.summary-card {
+  flex: 1;
+  min-width: 180px;
+  background: #f1f1f1;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.summary-card:hover {
+  transform: scale(1.03);
+}
+
+.summary-card.income {
+  background: #d1f7d6;
+}
+
+.summary-card.expense {
+  background: #ffd6d6;
+}
+
+.summary-card.action {
+  background: #d6e7ff;
+}
+
+.transaction-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0 10px;
+}
+
+.recent-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 30px;
+}
+
+.recent-table th,
+.recent-table td {
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+.table-body {
+  font-size: 12px;
+}
+/* CATOGORY MODAL  +++++++++++++++++++++++++++++++++++++++++++++ */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  width: 850px;
+  max-width: 100%;
+  position: relative;
+  z-index: 1000;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+}
+
+.close-btns {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 18px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  background-color: #c82333;
+}
+
+.overspending-alert {
+  background-color: #ffe6e6;
+  color: #d10000;
+  padding: 10px;
+  border-left: 10px solid #d10000;
+  margin: 10px 0 20px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.summary-card.expense.overspending {
+  border: 2px solid #d10000;
+  background-color: #ffe6e6;
+}
+
+.edit-d {
+  font-size: 11px;
+  background-color: rgb(69, 69, 202);
+  color: #f1f1f1;
+}
+
+.e-delete {
+  font-size: 11px;
+  background-color: #a51120;
+  color: #f1f1f1;
+}

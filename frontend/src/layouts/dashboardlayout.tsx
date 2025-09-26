@@ -32,18 +32,46 @@ const DashboardLayout: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [recentTransactions, setRecentTransactions] = useState<Transaction[]>([]);
 
-  // Fetch User Profile Data
+  // Fetch profile once, then transactions
   useEffect(() => {
-    const fetchUserProfile = async () => {
+    let cancelled = false;
+
+    (async () => {
       try {
-        const response = await axiosInstance.get<User>("/users/profile");
-        setUser(response.data);
-      } catch (error: any) {
-        console.error("❌ Error fetching user profile:", error?.response?.data || error?.message);
+        const { data: me } = await axiosInstance.get<User>("/users/profile");
+        if (cancelled) return;
+        setUser(me);
+
+        if (!me?.userId) return;
+
+        const { data: txs } = await axiosInstance.get<Transaction[]>(
+          `/transactions/user/${me.userId}`
+        );
+        if (cancelled) return;
+
+        const recent = txs
+          .slice()
+          .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+          .slice(0, 5);
+
+        setRecentTransactions(recent);
+      } catch (err: any) {
+        const status = err?.response?.status;
+        if (status === 401 || status === 403) {
+          // not authenticated or not authorized → bounce to login
+          localStorage.removeItem("token");
+          localStorage.removeItem("role");
+          navigate("/login");
+          return;
+        }
+        console.error("❌ Error fetching user profile/transactions:", err?.response?.data || err?.message);
       }
+    })();
+
+    return () => {
+      cancelled = true;
     };
-    fetchUserProfile();
-  }, []);
+  }, [navigate]);
 
   // Logout
   const handleLogout = (): void => {
@@ -73,27 +101,6 @@ const DashboardLayout: React.FC = () => {
     }
   };
 
-  // Fetch Recent Transactions
-  useEffect(() => {
-    const fetchRecent = async () => {
-      try {
-        const profile = await axiosInstance.get<User>("/users/profile");
-        const userId = profile.data.userId;
-
-        const res = await axiosInstance.get<Transaction[]>(`/transactions/user/${userId}`);
-        const recent = res.data
-          .slice() // shallow copy
-          .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-          .slice(0, 5);
-        setRecentTransactions(recent);
-      } catch (err) {
-        console.error("❌ Error fetching recent transactions:", err);
-      }
-    };
-
-    fetchRecent();
-  }, []);
-
   return (
     <div className="dashboard-container">
       {/* Sidebar */}
@@ -118,7 +125,6 @@ const DashboardLayout: React.FC = () => {
           {/* Profile Overlay */}
           {showProfile && user && (
             <div className="profile-overlay">
-              {/* Close Button (X) */}
               <button
                 className="close-profile-btn"
                 onClick={() => setShowProfile(false)}
@@ -138,14 +144,12 @@ const DashboardLayout: React.FC = () => {
                 <span>🏠</span> {user.address || "No address"}
               </p>
 
-              {/* Edit Profile */}
               <button
                 className="edit-profile-btn"
                 onClick={() => setShowEditProfile(true)}
               >
                 Edit Profile
               </button>
-              {/* Delete Account */}
               <button
                 className="delete-account-btn"
                 onClick={handleDeleteAccount}
@@ -159,33 +163,15 @@ const DashboardLayout: React.FC = () => {
         {/* Sidebar Navigation */}
         <nav>
           <ul>
-            <li>
-              <NavLink to="/dashboard">Dashboard</NavLink>
-            </li>
-            <li>
-              <NavLink to="/dashboard/accounts">Accounts</NavLink>
-            </li>
-            <li>
-              <NavLink to="/dashboard/transactions">Transactions</NavLink>
-            </li>
-            <li>
-              <NavLink to="/dashboard/budget">My Budgets</NavLink>
-            </li>
-            <li>
-              <NavLink to="/dashboard/loans">Loans</NavLink>
-            </li>
-            <li>
-              <NavLink to="/dashboard/savings">My Savings Goals</NavLink>
-            </li>
-            <li>
-              <NavLink to="/dashboard/investments">Investments</NavLink>
-            </li>
-            <li>
-              <NavLink to="/dashboard/reports">Reports</NavLink>
-            </li>
-            <li>
-              <NavLink to="/dashboard/subscriptions">Subscriptions</NavLink>
-            </li>
+            <li><NavLink to="/dashboard">Dashboard</NavLink></li>
+            <li><NavLink to="/dashboard/accounts">Accounts</NavLink></li>
+            <li><NavLink to="/dashboard/transactions">Transactions</NavLink></li>
+            <li><NavLink to="/dashboard/budget">My Budgets</NavLink></li>
+            <li><NavLink to="/dashboard/loans">Loans</NavLink></li>
+            <li><NavLink to="/dashboard/savings">My Savings Goals</NavLink></li>
+            <li><NavLink to="/dashboard/investments">Investments</NavLink></li>
+            <li><NavLink to="/dashboard/reports">Reports</NavLink></li>
+            <li><NavLink to="/dashboard/subscriptions">Subscriptions</NavLink></li>
           </ul>
         </nav>
 
@@ -197,7 +183,6 @@ const DashboardLayout: React.FC = () => {
 
       {/* Main Content */}
       <main className="main-content">
-        {/* Header stays fixed */}
         <header className="top-bar">
           <div className="stats">
             <div className="stat-items">
@@ -215,7 +200,6 @@ const DashboardLayout: React.FC = () => {
           </div>
         </header>
 
-        {/* Only this part will scroll */}
         <div className="dashboard-scrollable">
           <section className="content">
             <Outlet />
@@ -263,7 +247,7 @@ const DashboardLayout: React.FC = () => {
         </div>
       </main>
 
-      {/* Edit Profile Modal (Properly Closeable) */}
+      {/* Edit Profile Modal */}
       {showEditProfile && (
         <Profile closeModal={() => setShowEditProfile(false)} />
       )}
@@ -272,3 +256,5 @@ const DashboardLayout: React.FC = () => {
 };
 
 export default DashboardLayout;
+
+

@@ -13,6 +13,7 @@ import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./routes/protectedRoute";
 import Accounts from "./pages/Accounts";
 import Transactions from "./pages/transactions";
+import Budget from "./pages/budget";
 
 const App: React.FC = () => {
   return (
@@ -32,8 +33,8 @@ SS
                 <Route index element={<Dashboard />} />
                 <Route path="profile" element={<Profile />} />
                 <Route path="accounts" element={<Accounts />} />
-                  <Route path="transactions" element={<Transactions />} />
-                  
+                <Route path="transactions" element={<Transactions />} />
+                <Route path="budget" element={<Budget />} />
                 {/* You don't need an absolute duplicate like "/dashboard/profile" here */}
               </Route>
             </Route>

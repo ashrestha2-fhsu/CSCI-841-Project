@@ -17,16 +17,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
-import java.util.LinkedHashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,10 +51,19 @@ public class UserServiceImplementation implements UserService {
     public UserDTO register(UserDTO dto) {
         System.out.println("Registering user: " + dto.getUserName());
 
-        // ADMIN calls this method to create a user and assign roles in one shot
-        if (dto.getRoles() == null || dto.getRoles().isEmpty()) {
-            throw new IllegalArgumentException("At least one role must be provided.");
-        }
+        // pick exactly one role from dto (role or first of roles) — may be null
+        final RoleType requested =
+                dto.getRole() != null ? dto.getRole()
+                        : (dto.getRoles() != null && !dto.getRoles().isEmpty()
+                        ? dto.getRoles().iterator().next()
+                        : null);
+
+        // Only admins may set anything other than USER. Anonymous/self-register gets USER.
+        final boolean callerIsAdmin = isCallerAdmin();
+        final RoleType chosenRole =
+                callerIsAdmin
+                        ? (requested != null ? requested : RoleType.USER)
+                        : RoleType.USER;
 
         userRepository.findByUserName(dto.getUserName().trim())
                 .ifPresent(u -> { throw new NotFoundException.ConflictException("Username already taken"); });
@@ -83,17 +90,21 @@ public class UserServiceImplementation implements UserService {
         user.setDateCreated(LocalDateTime.now());
         user.setDateUpdated(LocalDateTime.now());
 
-        // Resolve roles (all must exist)
-        Set<Role> roles = dto.getRoles().stream()
-                .map(rt -> roleRepository.findByRoleName(rt)
-                        .orElseThrow(() -> new NotFoundException("Role not found: " + rt)))
-                .collect(Collectors.toCollection(LinkedHashSet::new));
-        user.setRoles(roles);
+        // Resolve role (must exist)
+        final Role roleEntity = roleRepository.findByRoleName(chosenRole)
+                .orElseThrow(() -> new NotFoundException("Role not found: " + chosenRole));
+        user.setRoles(new LinkedHashSet<>(List.of(roleEntity)));
 
         user = userRepository.save(user);
         return userMapper.toDTO(user);
     }
 
+    private boolean isCallerAdmin() {
+        var ctx = SecurityContextHolder.getContext();
+        var auth = ctx != null ? ctx.getAuthentication() : null;
+        if (auth == null || !auth.isAuthenticated()) return false;
+        return auth.getAuthorities().stream().anyMatch(a -> "ROLE_ADMIN".equals(a.getAuthority()));
+    }
 
     // METHOD TO UPDATE USER DATA  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     @Override

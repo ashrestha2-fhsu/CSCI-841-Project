@@ -352,7 +352,8 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ isOpen, onClose, init
                         <option value="">Select Destination</option>
                         {accounts.map((acc) => (
                           <option key={acc.accountId} value={acc.accountId}>
-                            {acc.institutionName} ({acc.name})
+                            {acc.name} ({acc.type})
+                            {/* {acc.institutionName} ({acc.name}) */}
                           </option>
                         ))}
                       </select>

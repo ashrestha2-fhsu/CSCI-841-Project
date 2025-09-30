@@ -241,15 +241,18 @@ body {
 
 /* Navbar Styles */
 .navbar {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid #e5e7eb;
   padding: 1rem 0;
   margin-bottom: 2rem;
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 50;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.1);
 }
 
 .navbar-content {
@@ -551,6 +554,27 @@ body {
   .feature-card {
     padding: 1.5rem;
   }
+  
+  /* Mobile navbar adjustments */
+  .navbar {
+    padding: 0.75rem 0;
+  }
+  
+  .page-container,
+  .main-content,
+  .dashboard-layout {
+    padding-top: 5rem; /* Slightly less padding on mobile */
+  }
+  
+  .sidebar {
+    top: 5rem;
+    height: calc(100vh - 5rem);
+  }
+  
+  .content-with-sidebar {
+    margin-left: 0; /* Full width on mobile */
+    min-height: calc(100vh - 5rem);
+  }
 }
 
 /* Home Page Styles */
@@ -851,6 +875,41 @@ body {
   min-height: 100vh;
   background: #f8fafc;
   padding: 2rem 0;
+  padding-top: 6rem; /* Add space for fixed navbar */
+}
+
+/* Main content area with navbar offset */
+.main-content {
+  padding-top: 6rem; /* Space for fixed navbar */
+  min-height: 100vh;
+}
+
+/* Dashboard layout with fixed navbar */
+.dashboard-layout {
+  padding-top: 6rem; /* Space for fixed navbar */
+  min-height: 100vh;
+}
+
+/* Ensure sidebar and content work with fixed navbar */
+.dashboard-content {
+  padding-top: 0; /* Remove any existing padding since navbar is fixed */
+}
+
+/* Sidebar positioning with fixed navbar */
+.sidebar {
+  position: fixed;
+  top: 6rem; /* Start below the fixed navbar */
+  left: 0;
+  height: calc(100vh - 6rem); /* Full height minus navbar height */
+  overflow-y: auto;
+  z-index: 999;
+}
+
+/* Main content area when sidebar is present */
+.content-with-sidebar {
+  margin-left: 250px; /* Adjust based on sidebar width */
+  padding-top: 0;
+  min-height: calc(100vh - 6rem);
 }
 
 /* About Page Styles */

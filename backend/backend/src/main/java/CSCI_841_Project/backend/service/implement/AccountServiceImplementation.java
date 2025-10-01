@@ -52,7 +52,7 @@ public class AccountServiceImplementation implements AccountService {
     @Override
     public List<AccountDTO> getAccountsByUser(Long userId) {
         // Check if the user exists before fetching accounts
-        if (userRepository.existsById(userId)){
+        if (!userRepository.existsById(userId)){
             throw new NotFoundException("User with ID "+ userId + " not found"); // ✅ Throws a 404 error
         }
 

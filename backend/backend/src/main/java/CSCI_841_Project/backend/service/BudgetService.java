@@ -30,3 +30,5 @@ public interface BudgetService {
     boolean isTransactionWithinBudget(Long userId, Long categoryId, BigDecimal transactionAmount, LocalDateTime transactionDate);
 }
 
+
+

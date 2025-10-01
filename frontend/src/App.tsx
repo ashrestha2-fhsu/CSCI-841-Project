@@ -11,6 +11,9 @@ import Profile from "./pages/Profile";               // ← ensure file is Profi
 import DashboardLayout from "./layouts/dashboardlayout"; // ← ensure file is DashboardLayout.tsx
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./routes/protectedRoute";
+import Accounts from "./pages/Accounts";
+import Transactions from "./pages/transactions";
+import Budget from "./pages/budget";
 
 const App: React.FC = () => {
   return (
@@ -23,12 +26,15 @@ const App: React.FC = () => {
             <Route path="/about" element={<About />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-
+SS
             {/* Protected Dashboard Routes */}
             <Route element={<ProtectedRoute />}>
               <Route path="/dashboard" element={<DashboardLayout />}>
                 <Route index element={<Dashboard />} />
                 <Route path="profile" element={<Profile />} />
+                <Route path="accounts" element={<Accounts />} />
+                <Route path="transactions" element={<Transactions />} />
+                <Route path="budget" element={<Budget />} />
                 {/* You don't need an absolute duplicate like "/dashboard/profile" here */}
               </Route>
             </Route>

@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class BudgetDTO {
+public class BudgetDTO { 
 
     /** Unique budget ID */
     private Long budgetId;

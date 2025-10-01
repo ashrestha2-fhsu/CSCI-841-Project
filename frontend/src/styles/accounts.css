@@ -1,0 +1,353 @@
+.accounts-container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+}
+
+.account-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.account-card {
+  background: #eee;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
+  padding: 15px;
+  width: 250px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  transition: all 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.accounts-container .header {
+  margin-bottom: 30px;
+  color: #da0404;
+}
+
+.account-card h3 {
+  margin: 10px 0;
+  color: #333;
+}
+
+.account-card p {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.account-card:hover {
+  transform: translateY(-5px); /* 👆 Subtle lift */
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15); /* 💫 Deeper shadow */
+}
+
+.account-card button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 15px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.account-card button:hover {
+  background: #0056b3;
+}
+
+.account-details {
+  margin-top: 10px;
+  padding: 10px;
+  background: #f9f9f9;
+  border-radius: 5px;
+}
+
+.account-details table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.account-details td {
+  padding: 6px;
+  text-align: left;
+}
+
+.account-details tr:nth-child(even) {
+  background: #eee;
+}
+
+/* Account  Form  +++++++++++++++++++++++++++++++++++++++++++++++*/
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  padding: 30px;
+  border-radius: 10px;
+  width: 850px;
+  max-width: 100%;
+  margin-left: 200px;
+  /* max-height: 90vh; */
+  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  background-color: #f1b8b8;
+}
+
+.modal h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+form {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 15px 20px;
+}
+
+form label {
+  text-align: left;
+  align-self: stretch;
+  display: block;
+  margin-bottom: 15px;
+  font-weight: bold;
+  color: #333;
+}
+
+form input,
+form select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.form-buttons {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+form button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  gap: 40px;
+  width: 100px;
+}
+
+form button[type="submit"] {
+  background-color: #007bff;
+  color: white;
+}
+
+.cancel-btn {
+  background-color: #ccc;
+  color: #333;
+}
+
+/* Account form modal */
+.account-actions {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: right;
+  gap: 15px;
+  margin-top: -60px;
+}
+
+.account-actions button {
+  background-color: #28a745;
+  color: white;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.account-actions button:hover {
+  background-color: #218838;
+}
+
+/* ++++++++++++++++++++++++++++++++++ */
+.form-table {
+  width: 800px;
+  border-collapse: collapse;
+}
+
+.form-table td {
+  padding: 8px;
+  vertical-align: middle;
+}
+
+.form-buttons-row {
+  text-align: center;
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 150px;
+  margin-top: 10px;
+}
+
+.save-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.cancel-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.save-btn,
+.cancel-btn {
+  padding: 10px 20px;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* View All Accounts Modal Page +++++++++++++++++++++++++++++++++++++++++++++++ */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modals {
+  padding: 30px;
+  border-radius: 10px;
+  width: 1000px;
+  max-width: 100%;
+  margin-left: 200px;
+  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  background-color: #f0e3e3;
+}
+
+.accounts-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  font-size: 12px;
+}
+
+.accounts-table th,
+.accounts-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+.accounts-table th {
+  background-color: #e85b5b;
+  font-weight: bold;
+  text-align: center;
+  font-size: 14px;
+}
+
+.accounts-table button {
+  padding: 6px 10px;
+  margin: 0 4px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.accounts-table button:hover {
+  opacity: 0.9;
+}
+
+.accounts-table button:nth-child(1) {
+  background-color: #007bff;
+  color: white;
+}
+
+.accounts-table button:nth-child(2) {
+  background-color: #dc3545;
+  color: white;
+}
+
+.accounts-table button:nth-child(3) {
+  background-color: #28a745;
+  color: white;
+}
+
+.form-buttons {
+  text-align: center;
+}
+
+.closes-btn {
+  position: absolute;
+  top: 270px;
+  right: 360px;
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 18px;
+  font-weight: bold;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.close-btn:hover {
+  background: #c82333;
+}
+
+/* Grayed out + italicized deleted row */
+.deleted-row {
+  background-color: #f0f0f0;
+  color: #999;
+  font-style: italic;
+}
+
+/* Disable buttons inside deleted rows */
+.deleted-row button {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+/* EXCEPT restore button — we want it fully active */
+.deleted-row button:only-child {
+  opacity: 1;
+  pointer-events: auto;
+  cursor: pointer;
+  font-style: normal;
+  color: #363f38;
+  font-weight: bold;
+}

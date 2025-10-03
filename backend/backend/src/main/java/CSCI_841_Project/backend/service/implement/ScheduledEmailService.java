@@ -1,8 +1,10 @@
 package CSCI_841_Project.backend.service.implement;
 
 import CSCI_841_Project.backend.entity.Budget;
+import CSCI_841_Project.backend.entity.Loan;
 import CSCI_841_Project.backend.entity.User;
 import CSCI_841_Project.backend.repository.BudgetRepository;
+import CSCI_841_Project.backend.repository.LoanRepository;
 import CSCI_841_Project.backend.repository.UserRepository;
 import CSCI_841_Project.backend.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +20,8 @@ public class ScheduledEmailService {
 
     @Autowired
     private EmailService emailService;
-//    @Autowired
-//    private LoanRepository loanRepository;
+    @Autowired
+    private LoanRepository loanRepository;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -31,24 +33,24 @@ public class ScheduledEmailService {
 
 
     /** ✅ Send Loan Reminders Every Day at 9 AM */
-//    @Scheduled(cron = "0 0 9 * * ?")
-//    public void sendLoanReminders() {
-//        List<Loan> loans = loanRepository.findLoansDueSoon();
-//        for (Loan loan : loans) {
-//            User user = loan.getUser();
-//            emailService.sendEmail(
-//                    user.getEmail(),
-//                    "Loan Payment Reminder - " + loan.getLenderName(),
-//                    "<p>Hello " + user.getFirstName() + ",</p>"
-//                            + "<p>Your loan payment for <strong>" + loan.getLenderName() + "</strong> is due on <strong>"
-//                            + loan.getDueDate() + "</strong>.</p>"
-//                            + "<p>Amount due: <strong>$" + loan.getMonthlyPayment() + "</strong>.</p>"
-//                            + "<p>Please ensure timely payment to avoid late fees.</p>"
-//                            + "<p>Best regards,<br>Your Finance Tracker Team</p>"
-//            );
-//        }
-//        System.out.println("✅ Loan reminders sent successfully!");
-//    }
+    @Scheduled(cron = "0 0 9 * * ?")
+    public void sendLoanReminders() {
+        List<Loan> loans = loanRepository.findLoansDueSoon();
+        for (Loan loan : loans) {
+            User user = loan.getUser();
+            emailService.sendEmail(
+                    user.getEmail(),
+                    "Loan Payment Reminder - " + loan.getLenderName(),
+                    "<p>Hello " + user.getFirstName() + ",</p>"
+                            + "<p>Your loan payment for <strong>" + loan.getLenderName() + "</strong> is due on <strong>"
+                            + loan.getDueDate() + "</strong>.</p>"
+                            + "<p>Amount due: <strong>$" + loan.getMonthlyPayment() + "</strong>.</p>"
+                            + "<p>Please ensure timely payment to avoid late fees.</p>"
+                            + "<p>Best regards,<br>Your Finance Tracker Team</p>"
+            );
+        }
+        System.out.println("✅ Loan reminders sent successfully!");
+    }
 
     /** ✅ Send Budget Alerts Every Monday at 10 AM */
     @Scheduled(cron = "0 0 10 * * MON")

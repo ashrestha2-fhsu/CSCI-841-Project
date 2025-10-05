@@ -11,7 +11,7 @@ public class BudgetReportDTO {
     private BigDecimal totalRolloverAmount;
     private LocalDate startDate;
     private LocalDate endDate;
-    private List<BudgetDetailsDTO> budgets;
+    private List<BudgetDetailsDTO> budgets; 
 
     // Constructor
     public BudgetReportDTO(){}

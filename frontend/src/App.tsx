@@ -15,6 +15,7 @@ import Accounts from "./pages/Accounts";
 import Transactions from "./pages/transactions";
 import Budget from "./pages/budget";
 
+
 const App: React.FC = () => {
   return (
     <Router>

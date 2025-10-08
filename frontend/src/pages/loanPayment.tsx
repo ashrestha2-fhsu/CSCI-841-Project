@@ -1,25 +1,24 @@
 import React, { useEffect, useState } from "react";
-import axiosInstance from "../service/axiosInstance";
+import axiosInstance from "../services/axiosInstance";
+import { Loan, Payment } from "../types";
 import "../styles/loan.css";
 
-const LoanPayment = ({ loan, onClose }) => {
-  const [payments, setPayments] = useState([]);
+interface LoanPaymentProps {
+  loan: Loan;
+  onClose: () => void;
+}
+
+const LoanPayment: React.FC<LoanPaymentProps> = ({ loan, onClose }) => {
+  const [payments, setPayments] = useState<Payment[]>([]);
 
   useEffect(() => {
-    if (loan?.loanId) {
-      fetchPayments();
-    }
+    if (loan?.loanId) fetchPayments();
   }, [loan]);
 
   const fetchPayments = async () => {
     try {
-      const res = await axiosInstance.get(`/loan-payments/${loan.loanId}`);
-      if (Array.isArray(res.data)) {
-        setPayments(res.data);
-      } else {
-        console.warn("⚠️ Unexpected payment data:", res.data);
-        setPayments([]);
-      }
+      const res = await axiosInstance.get<Payment[]>(`/loan-payments/${loan.loanId}`);
+      setPayments(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
       console.error("Error fetching payments:", err);
       setPayments([]);
@@ -49,15 +48,15 @@ const LoanPayment = ({ loan, onClose }) => {
             </tr>
           </thead>
           <tbody>
-            {Array.isArray(payments) && payments.length > 0 ? (
+            {payments.length > 0 ? (
               payments.map((p) => (
                 <tr key={p.paymentId}>
-                  <td>${p.paymentAmount?.toFixed(2)}</td>
-                  <td>${p.extraPayment?.toFixed(2)}</td>
-                  <td>${p.principalPaid?.toFixed(2)}</td>
-                  <td>${p.interestPaid?.toFixed(2)}</td>
-                  <td>${p.totalAmountPaid?.toFixed(2)}</td>
-                  <td>${p.remainingBalance?.toFixed(2)}</td>
+                  <td>${p.paymentAmount.toFixed(2)}</td>
+                  <td>${p.extraPayment.toFixed(2)}</td>
+                  <td>${p.principalPaid.toFixed(2)}</td>
+                  <td>${p.interestPaid.toFixed(2)}</td>
+                  <td>${p.totalAmountPaid.toFixed(2)}</td>
+                  <td>${p.remainingBalance.toFixed(2)}</td>
                   <td>{p.lastPaymentDate?.split("T")[0]}</td>
                   <td>{p.nextDueDate?.split("T")[0]}</td>
                   <td>{p.paymentDate?.split("T")[0]}</td>
@@ -65,7 +64,7 @@ const LoanPayment = ({ loan, onClose }) => {
               ))
             ) : (
               <tr>
-                <td colSpan="9">No payments found for this loan.</td>
+                <td colSpan={9}>No payments found for this loan.</td>
               </tr>
             )}
           </tbody>

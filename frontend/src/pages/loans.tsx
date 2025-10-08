@@ -1,40 +1,52 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
-import axiosInstance from "../service/axiosInstance";
+import axiosInstance from "../services/axiosInstance";
 import LoanForm from "./loanForm";
 import LoanPaymentForm from "./loanPaymentForm";
-import LoanPayment from "./loanPayment"; // ✅ This is the modal now
+import LoanPayment from "./loanPayment";
+import { Loan as LoanType } from "../types";
 import "../styles/loan.css";
 
-const Loan = () => {
-  const [loans, setLoans] = useState([]);
-  const [report, setReport] = useState({});
+interface LoanReport {
+  numberOfLoans: number;
+  totalLoanBorrowed: number;
+  totalOutstandingBalance: number;
+}
+
+const Loan: React.FC = () => {
+  const [loans, setLoans] = useState<LoanType[]>([]);
+  const [report, setReport] = useState<LoanReport>({
+    numberOfLoans: 0,
+    totalLoanBorrowed: 0,
+    totalOutstandingBalance: 0,
+  });
   const [showForm, setShowForm] = useState(false);
-  const [editLoan, setEditLoan] = useState(null);
-  const [selectedLoan, setSelectedLoan] = useState(null);
+  const [editLoan, setEditLoan] = useState<LoanType | null>(null);
+  const [selectedLoan, setSelectedLoan] = useState<LoanType | null>(null);
   const [showPaymentForm, setShowPaymentForm] = useState(false);
-  const [showPaymentDetails, setShowPaymentDetails] = useState(false); // ✅ NEW
-  const navigate = useNavigate();
+  const [showPaymentDetails, setShowPaymentDetails] = useState(false);
 
   const fetchLoans = async () => {
     try {
       const profile = await axiosInstance.get("/users/profile");
       const userId = profile.data.userId;
-      const res = await axiosInstance.get(`/loans/user/${userId}`);
-      const loans = res.data;
-      setLoans(loans);
+      const res = await axiosInstance.get<LoanType[]>(`/loans/user/${userId}`);
+      const loansData = res.data;
+      console.log("Loans fetched:", res.data);
+      setLoans(loansData);
 
-      const totalBorrowed = loans.reduce(
-        (acc, loan) => acc + parseFloat(loan.amountBorrowed || 0),
+      const totalBorrowed = loansData.reduce(
+        (acc, loan) => acc + parseFloat(loan.amountBorrowed || "0"),
         0
       );
-      const totalOutstandingBalance = loans.reduce(
-        (acc, loan) => acc + parseFloat(loan.outstandingBalance || 0),
+      const totalOutstandingBalance = loansData.reduce(
+        (acc, loan) => acc + parseFloat(loan.outstandingBalance || "0"),
         0
       );
+
       setReport({
-        numberOfLoans: loans.length,
+        numberOfLoans: loansData.length,
         totalLoanBorrowed: totalBorrowed,
         totalOutstandingBalance,
       });
@@ -43,7 +55,7 @@ const Loan = () => {
     }
   };
 
-  const handleDelete = async (loanId) => {
+  const handleDelete = async (loanId: string) => {
     if (!window.confirm("Are you sure you want to delete this loan?")) return;
     try {
       await axiosInstance.delete(`/loans/${loanId}`);
@@ -53,10 +65,14 @@ const Loan = () => {
     }
   };
 
-  const handlePaymentSubmit = async (paymentData) => {
+  const handlePaymentSubmit = async (paymentData: {
+    loanId: string;
+    paymentAmount: number;
+    isExtra?: boolean;
+  }) => {
     try {
       await axiosInstance.post(
-        `/loan-payments/${paymentData.loanId}/pay`, // ✅ fixed endpoint
+        `/loan-payments/${paymentData.loanId}/pay`,
         paymentData.isExtra
           ? { extraPayment: paymentData.paymentAmount }
           : { paymentAmount: paymentData.paymentAmount }
@@ -83,15 +99,15 @@ const Loan = () => {
       <div className="loan-summary-cards">
         <div className="loan-summary-card total-loan">
           <h4>Total Loans</h4>
-          <p>{report.numberOfLoans || 0}</p>
+          <p>{report.numberOfLoans}</p>
         </div>
         <div className="loan-summary-card amount-borrowed">
           <h4>Total Borrowed</h4>
-          <p>${report.totalLoanBorrowed?.toFixed(2) || 0}</p>
+          <p>${report.totalLoanBorrowed.toFixed(2)}</p>
         </div>
         <div className="loan-summary-card outstanding-balance">
           <h4>Outstanding Balance</h4>
-          <p>${report.totalOutstandingBalance?.toFixed(2) || 0}</p>
+          <p>${report.totalOutstandingBalance.toFixed(2)}</p>
         </div>
         <button
           className="loan-add-btn"
@@ -180,7 +196,7 @@ const Loan = () => {
         />
       )}
 
-      {showPaymentForm && (
+      {showPaymentForm && selectedLoan && (
         <LoanPaymentForm
           loan={selectedLoan}
           onClose={() => setShowPaymentForm(false)}

@@ -33,7 +33,6 @@ const Loan: React.FC = () => {
       const userId = profile.data.userId;
       const res = await axiosInstance.get<LoanType[]>(`/loans/user/${userId}`);
       const loansData = res.data;
-      console.log("Loans fetched:", res.data);
       setLoans(loansData);
 
       const totalBorrowed = loansData.reduce(

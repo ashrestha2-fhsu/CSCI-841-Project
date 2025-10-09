@@ -97,6 +97,12 @@ const LoanForm: React.FC<LoanFormProps> = ({ initialData, onClose, onSuccess }) 
             <button type="submit" className="btn btn-save">{initialData ? "Update" : "Save"}</button>
             <button type="button" className="btn btn-cancel" onClick={onClose}>Cancel</button>
           </div>
+          <div className="form-buttons">
+            <button type="submit">💾 Save</button>
+            <button type="button" onClick={onClose}>
+              ❌ Cancel
+            </button>
+          </div>
         </form>
       </div>
     </div>

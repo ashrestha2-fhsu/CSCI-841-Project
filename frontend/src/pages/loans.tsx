@@ -92,7 +92,7 @@ const Loan: React.FC = () => {
   return (
     <div className="loan-container">
       <h2 className="loan-title">
-        <i className="fas fa-file-invoice-dollar"></i> My Loans
+        <i className="fa fa-file-invoice-dollar"></i> My Loans
       </h2>
 
       <div className="loan-summary-cards">

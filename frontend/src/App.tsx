@@ -14,6 +14,7 @@ import ProtectedRoute from "./routes/protectedRoute";
 import Accounts from "./pages/Accounts";
 import Transactions from "./pages/transactions";
 import Budget from "./pages/budget";
+import Loan from "./pages/loans";
 
 const App: React.FC = () => {
   return (
@@ -35,6 +36,7 @@ SS
                 <Route path="accounts" element={<Accounts />} />
                 <Route path="transactions" element={<Transactions />} />
                 <Route path="budget" element={<Budget />} />
+                <Route path="loans" element={<Loan />} />
                 {/* You don't need an absolute duplicate like "/dashboard/profile" here */}
               </Route>
             </Route>

@@ -1,0 +1,320 @@
+/* Loan Modal Styles */
+.loan-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.loan-modal {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 30px;
+  width: 95%;
+  max-width: 550px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  position: relative;
+}
+
+.loan-modal h3 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 20px;
+  color: #333;
+}
+
+.loan-modal label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 4px;
+  color: #444;
+}
+
+.loan-modal input,
+.loan-modal select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.loan-modal .form-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.loan-modal button[type="submit"] {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.loan-title {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.loan-report-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 30px;
+}
+
+.loan-card {
+  flex: 1;
+  background: white;
+  padding: 15px 20px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  font-weight: bold;
+}
+
+.loan-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.loan-table th,
+.loan-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 14px;
+  text-align: left;
+}
+
+.loan-table th {
+  background-color: #f8f8f8;
+  font-weight: bold;
+}
+
+.loan-table td:last-child {
+  white-space: nowrap;
+}
+
+.loan-actions button {
+  margin-right: 5px;
+}
+
+.add-loan-btn {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 16px;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.add-loan-btn:hover {
+  background-color: #0056b3;
+}
+
+.edit-btn {
+  background-color: #068408;
+  color: #fff;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.delete-btn {
+  background-color: rgb(228, 35, 35);
+  color: #fff;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.details-btn {
+  margin-left: 6px;
+  background-color: rgb(195, 173, 6);
+  border-color: rgb(195, 173, 6);
+  border-radius: 5px;
+  color: #580202;
+}
+
+.pay-btn {
+  background-color: rgb(47, 6, 195);
+  border-color: rgb(25, 6, 195);
+  border-radius: 5px;
+  color: #ece8e8;
+}
+
+.btn-save {
+  margin-right: 50px;
+}
+
+.loan-summary-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.loan-summary-card {
+  /* background-color: #fff; */
+  padding: 15px 25px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  flex: 1;
+  min-width: 180px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.loan-add-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.loan-add-btn:hover {
+  background-color: #0056b3;
+}
+
+.outstanding-balance {
+  background-color: rgb(175, 190, 15);
+}
+
+.amount-borrowed {
+  background-color: aquamarine;
+}
+
+.total-loan {
+  background-color: rgb(132, 160, 245);
+}
+
+.save-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 8px 14px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background-color: #aaa;
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/*  radio optio */
+
+.radio-inline {
+  margin-top: -50px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.form-table td {
+  padding: 10px 12px;
+  vertical-align: middle;
+}
+
+input[type="number"],
+input[type="date"] {
+  width: 100%;
+  max-width: 600px;
+  padding: 6px 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.form-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* Loan Payment modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.loan-payment-modal {
+  background: #f8bcbc;
+  border-radius: 12px;
+  padding: 2rem;
+  width: 90%;
+  max-width: 1200px; /* ⬅️ Increased width */
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+.modal h2 {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.loan-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.loan-table th,
+.loan-table td {
+  padding: 10px 14px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+.loan-table th {
+  background: #f2f2f2;
+}
+
+.close-btns {
+  background-color: #dc0909;
+  position: absolute;
+  top: 370px;
+  right: 260px;
+  /* background: transparent; */
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #f6f2f2;
+}

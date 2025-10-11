@@ -2,6 +2,7 @@ package CSCI_841_Project.backend.controller;
 
 import CSCI_841_Project.backend.dto.UserDTO;
 import CSCI_841_Project.backend.service.UserService;
+import jakarta.annotation.security.PermitAll;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +22,7 @@ public class UserController {
 
 
     @PostMapping("/register")
+    @PermitAll
     public ResponseEntity<UserDTO> registerUser(@RequestBody UserDTO userDTO) {
         System.out.println("Received registration request for: " + userDTO.getUserName()); // ✅ Log request
         UserDTO registeredUser = userService.register(userDTO);

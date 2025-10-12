@@ -47,6 +47,7 @@ public class AdminController {
 
 
     @GetMapping("/roles")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<List<RoleDTO>> listRoles() {
         List<RoleDTO> result = roleRepository.findAll().stream().map(r -> {
             RoleDTO d = new RoleDTO();
@@ -88,26 +89,6 @@ public class AdminController {
         User u = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
         return ResponseEntity.ok(u.getRoles().stream().map(Role::getRoleName).toList());
     }
-
-
-    // Create OR update a role (idempotent upsert)
-//    @PostMapping("/roles")
-//    public ResponseEntity<RoleDTO> upsertRole(@Valid @RequestBody RoleDTO dto) {
-//        RoleType name = dto.getRole();
-//        Set<RolePermission> perms = (dto.getPermissions()==null || dto.getPermissions().isEmpty())
-//                ? EnumSet.noneOf(RolePermission.class)
-//                : EnumSet.copyOf(dto.getPermissions());
-//
-//        Role role = roleRepository.findByRoleName(name)
-//                .map(r -> { r.setDescription(dto.getDescription()); r.setPermissions(perms); return roleRepository.save(r); })
-//                .orElseGet(() -> roleRepository.save(new Role(name, dto.getDescription(), perms)));
-//
-//        RoleDTO out = new RoleDTO();
-//        out.setRole(role.getRoleName());
-//        out.setDescription(role.getDescription());
-//        out.setPermissions(role.getPermissions());
-//        return ResponseEntity.ok(out); // 200 for upsert
-//    }
 
 
 

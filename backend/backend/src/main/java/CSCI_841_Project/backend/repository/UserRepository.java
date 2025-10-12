@@ -46,4 +46,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
            """)
     Optional<User> findByUserNameWithRoles(@Param("username") String username);
 
+
+
 }

@@ -26,7 +26,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.userDetailsService = userDetailsService;
     }
 
-    // JwtAuthenticationFilter.java
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String p = request.getServletPath();
@@ -37,50 +36,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
             throws ServletException, IOException {
-
         String bearer = req.getHeader("Authorization");
+        System.out.println("Authorization header on " + req.getRequestURI() + ": " + bearer);
         String token = (StringUtils.hasText(bearer) && bearer.startsWith("Bearer ")) ? bearer.substring(7) : null;
-
-        if (StringUtils.hasText(token) && jwtTokenProvider.validateToken(token)) {
-            String username = jwtTokenProvider.getUsername(token);
-            var userDetails = userDetailsService.loadUserByUsername(username);
-            var auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(auth);
+        try {
+            if (StringUtils.hasText(token) && jwtTokenProvider.validateToken(token)) {
+                var userDetails = userDetailsService.loadUserByUsername(jwtTokenProvider.getUsername(token));
+                var auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            }
+        } catch (Exception ignore) {
+            // DO NOT write 403 here—just fall through as anonymous
         }
-
         chain.doFilter(req, res);
     }
 
 
-//    @Override
-//    protected boolean shouldNotFilter(HttpServletRequest request) {
-//        String p = request.getServletPath();
-//        return p.startsWith("/api/auth/"); // covers /register, /login, /verify, /auth/setup/**
-//    }
-//
-//
-//    @Override
-//    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
-//            throws ServletException, IOException {
-//        String bearer = req.getHeader("Authorization");
-//        String token = (bearer != null && bearer.startsWith("Bearer ")) ? bearer.substring(7) : null;
-//
-//        if (token != null && jwtTokenProvider.validateToken(token)) {
-//            String username = jwtTokenProvider.getUsername(token);
-//            try {
-//                UserDetails user = userDetailsService.loadUserByUsername(username);
-//                var auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-//                auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
-//                SecurityContextHolder.getContext().setAuthentication(auth);
-//                System.out.println("[JWT] Authenticated as " + username + " with " + user.getAuthorities());
-//            } catch (UsernameNotFoundException e) {
-//                // If token references a non-existent user, do NOT blow up public requests.
-//                System.out.println("[JWT] Token subject not found: " + username);
-//                SecurityContextHolder.clearContext();
-//            }
-//        }
-//
-//        chain.doFilter(req, res);
-//    }
+
 
 }

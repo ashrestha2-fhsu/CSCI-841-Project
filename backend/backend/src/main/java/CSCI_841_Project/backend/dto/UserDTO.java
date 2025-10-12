@@ -30,6 +30,7 @@ public class UserDTO {
     private boolean isDeleted;
     private boolean isVerified;
     private Set<RoleType> roles;
+    private RoleType role;
     private LocalDateTime lastLogin;
     private LocalDateTime dateCreated;
     private LocalDateTime dateUpdated;

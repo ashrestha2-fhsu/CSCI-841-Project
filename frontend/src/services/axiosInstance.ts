@@ -1,22 +1,32 @@
-import axios from "axios";
+
+
+
+// src/services/axiosInstance.ts
+import axios, { AxiosRequestConfig, AxiosError } from "axios";
 
 const axiosInstance = axios.create({
   baseURL: "http://localhost:8080/api",
-  withCredentials: true,
+  withCredentials: false, // set true only if you actually use cookies
 });
 
-// ✅ Attach JWT token to every request
-axiosInstance.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
+axiosInstance.interceptors.request.use(
+  (config: AxiosRequestConfig) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      if (!config.headers) config.headers = {};
+      (config.headers as Record<string, string>)["Authorization"] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error: AxiosError) => Promise.reject(error)
+);
 
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-    // console.log("✅ Axios is sending token:", token);
-  } else {
-    console.warn("⚠️ No token found in localStorage.");
+axiosInstance.interceptors.response.use(
+  (res) => res,
+  (error: AxiosError) => {
+    // Optional: handle 401/403 here
+    return Promise.reject(error);
   }
-
-  return config;
-});
+);
 
 export default axiosInstance;

@@ -25,4 +25,8 @@ public class LoanPaymentDTO {
     private BigDecimal remainingBalance;
     private LocalDate lastPaymentDate;
     private LocalDate nextDueDate;
+    private String paymentMethod;
+    private Long accountId;
+    private String accountName;
+    private String externalReference;
 }

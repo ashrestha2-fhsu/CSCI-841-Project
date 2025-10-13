@@ -1,12 +1,16 @@
 package CSCI_841_Project.backend.service.implement;
 
 import CSCI_841_Project.backend.dto.LoanPaymentDTO;
+import CSCI_841_Project.backend.entity.Account;
 import CSCI_841_Project.backend.entity.Loan;
 import CSCI_841_Project.backend.entity.LoanPayment;
+import CSCI_841_Project.backend.enums.PaymentMethod;
 import CSCI_841_Project.backend.exception.NotFoundException;
 import CSCI_841_Project.backend.mapper.LoanPaymentMapper;
+import CSCI_841_Project.backend.repository.AccountRepository;
 import CSCI_841_Project.backend.repository.LoanPaymentRepository;
 import CSCI_841_Project.backend.repository.LoanRepository;
+import CSCI_841_Project.backend.service.AccountService;
 import CSCI_841_Project.backend.service.EmailService;
 import CSCI_841_Project.backend.service.LoanPaymentService;
 import CSCI_841_Project.backend.service.LoanService;
@@ -18,7 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,6 +42,10 @@ public class LoanPaymentServiceImplementation implements LoanPaymentService {
     private LoanService loanService;  // ✅ Inject LoanService
     @Autowired
     private  ScheduledEmailService scheduledEmailService;
+    @Autowired
+    private AccountService accountService;
+    @Autowired
+    private AccountRepository accountRepository;
 
 
 
@@ -45,48 +55,171 @@ public class LoanPaymentServiceImplementation implements LoanPaymentService {
 
     @Override
     @Transactional
-    public LoanPaymentDTO makePayment(Long loanId, BigDecimal paymentAmount, BigDecimal extraPayment) {
+    public LoanPaymentDTO makePayment(Long loanId,
+                                      BigDecimal paymentAmount,
+                                      BigDecimal extraPayment,
+                                      String paymentMethod,          // NEW
+                                      Long accountId,                // NEW (required if INTERNAL_ACCOUNT)
+                                      String externalReference,      // NEW (optional)
+                                      LocalDate paymentDate          // NEW (optional; null -> now)
+    ) {
         Loan loan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new NotFoundException("Loan not found"));
 
-        // ✅ Prevent `NullPointerException`
+        // Normalize
         if (paymentAmount == null) paymentAmount = BigDecimal.ZERO;
-        if (extraPayment == null) extraPayment = BigDecimal.ZERO;
+        if (extraPayment == null)  extraPayment  = BigDecimal.ZERO;
 
-        // ✅ Ensure at least one payment type is provided
-        if (paymentAmount.compareTo(BigDecimal.ZERO) <= 0 && extraPayment.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new RuntimeException("You must provide either a monthly payment or an extra payment!");
+        boolean hasMonthly = paymentAmount.compareTo(BigDecimal.ZERO) > 0;
+        boolean hasExtra   = extraPayment.compareTo(BigDecimal.ZERO) > 0;
+
+        // Exactly one
+        if (hasMonthly == hasExtra) {
+            throw new RuntimeException("Provide either a monthly payment OR an extra payment (not both).");
         }
 
+        // Parse/Default method
+        PaymentMethod method;
+        try {
+            method = (paymentMethod == null || paymentMethod.isBlank())
+                    ? PaymentMethod.CASH
+                    : PaymentMethod.valueOf(paymentMethod);
+        } catch (IllegalArgumentException ex) {
+            throw new RuntimeException("Unsupported payment method: " + paymentMethod);
+        }
+
+        // Resolve account if needed
+        // Resolve account if needed (no AccountService.debit, no availableBalance)
+        Account account = null;
+        if (method == PaymentMethod.INTERNAL_ACCOUNT) {
+            if (accountId == null) {
+                throw new RuntimeException("accountId is required for INTERNAL_ACCOUNT payments.");
+            }
+            account = accountRepository.findById(accountId)
+                    .orElseThrow(() -> new NotFoundException("Account not found"));
+
+            // Optional: ensure not soft-deleted (if your Account has isDeleted flag)
+             if (account.isDeleted()) throw new RuntimeException("Selected account is deleted.");
+
+            // Optional: ownership check to match the loan owner
+             if (!Objects.equals(account.getUser().getUserId(), loan.getUser().getUserId())) {
+                 throw new RuntimeException("Account does not belong to this user.");
+             }
+
+            BigDecimal debit = hasMonthly ? paymentAmount : extraPayment;
+
+            // Use current balance; no 'availableBalance' in your model
+            if (account.getBalance() == null) {
+                account.setBalance(BigDecimal.ZERO);
+            }
+            if (account.getBalance().compareTo(debit) < 0) {
+                throw new RuntimeException("Insufficient funds in the selected account.");
+            }
+
+            // Subtract and persist
+            account.setBalance(account.getBalance().subtract(debit));
+            accountRepository.save(account);
+        }
+
+
+        // Build payment record
         LoanPayment loanPayment = new LoanPayment();
         loanPayment.setLoan(loan);
         loanPayment.setUser(loan.getUser());
+        loanPayment.setPaymentMethod(method);                 // NEW
+        loanPayment.setAccount(account);                      // NEW
+        loanPayment.setExternalReference(externalReference);  // NEW
+        loanPayment.setPaymentDate(
+                paymentDate == null ? LocalDateTime.now() : paymentDate.atStartOfDay()
+        );
 
-        if (paymentAmount.compareTo(BigDecimal.ZERO) > 0) {
+        // Apply math
+        if (hasMonthly) {
             processMonthlyPayment(loan, paymentAmount, loanPayment);
+        } else {
+            // principal-only extra payment, do NOT move due date
+            if (extraPayment.compareTo(BigDecimal.ZERO) <= 0) {
+                throw new RuntimeException("Extra payment must be greater than zero!");
+            }
+            loan.setOutstandingBalance(loan.getOutstandingBalance().subtract(extraPayment));
+            if (loan.getOutstandingBalance().compareTo(BigDecimal.ZERO) < 0) {
+                loan.setOutstandingBalance(BigDecimal.ZERO);
+            }
+
+            loanPayment.setPaymentAmount(BigDecimal.ZERO);
+            loanPayment.setExtraPayment(extraPayment);
+            loanPayment.setPrincipalPaid(extraPayment);
+            loanPayment.setInterestPaid(BigDecimal.ZERO);
+            loanPayment.setRemainingBalance(loan.getOutstandingBalance());
+            loanPayment.setLastPaymentDate(LocalDate.now());
+            loanPayment.setNextDueDate(loan.getDueDate());
         }
 
-        if (extraPayment.compareTo(BigDecimal.ZERO) > 0) {
-            loanPayment = processExtraPayment(loan, extraPayment);
-        }
-
+        // Persist
         loanPaymentRepository.save(loanPayment);
-        // ✅ Recalculate Total Amount Paid & Interest Paid
-        BigDecimal totalAmountPaid = loanPaymentRepository.findTotalAmountPaidByLoanId(loanId).orElse(BigDecimal.ZERO);
+
+        // Aggregates
+        BigDecimal totalAmountPaid   = loanPaymentRepository.findTotalAmountPaidByLoanId(loanId).orElse(BigDecimal.ZERO);
         BigDecimal totalInterestPaid = loanPaymentRepository.findTotalInterestPaidByLoanId(loanId).orElse(BigDecimal.ZERO);
-        // ✅ Update the Loan entity with new aggregated values
+
+        // Update snapshots
         loan.setTotalOutstandingBalance(loan.getOutstandingBalance());
-
-        // ✅ Update Loan Entity
         loanPayment.setTotalAmountPaid(totalAmountPaid);
-        loanPayment.setInterestPaid(totalInterestPaid);
-
+        // If you store per-payment interest in the row, DO NOT overwrite it here.
+        // If you store cumulative interest in the row, uncomment:
+        // loanPayment.setInterestPaid(totalInterestPaid);
 
         loan.updateLoanStatus();
         loanRepository.save(loan);
 
         return loanPaymentMapper.toDTO(loanPayment);
     }
+
+
+//    @Override
+//    @Transactional
+//    public LoanPaymentDTO makePayment(Long loanId, BigDecimal paymentAmount, BigDecimal extraPayment) {
+//        Loan loan = loanRepository.findById(loanId)
+//                .orElseThrow(() -> new NotFoundException("Loan not found"));
+//
+//        // ✅ Prevent `NullPointerException`
+//        if (paymentAmount == null) paymentAmount = BigDecimal.ZERO;
+//        if (extraPayment == null) extraPayment = BigDecimal.ZERO;
+//
+//        // ✅ Ensure at least one payment type is provided
+//        if (paymentAmount.compareTo(BigDecimal.ZERO) <= 0 && extraPayment.compareTo(BigDecimal.ZERO) <= 0) {
+//            throw new RuntimeException("You must provide either a monthly payment or an extra payment!");
+//        }
+//
+//        LoanPayment loanPayment = new LoanPayment();
+//        loanPayment.setLoan(loan);
+//        loanPayment.setUser(loan.getUser());
+//
+//        if (paymentAmount.compareTo(BigDecimal.ZERO) > 0) {
+//            processMonthlyPayment(loan, paymentAmount, loanPayment);
+//        }
+//
+//        if (extraPayment.compareTo(BigDecimal.ZERO) > 0) {
+//            loanPayment = processExtraPayment(loan, extraPayment);
+//        }
+//
+//        loanPaymentRepository.save(loanPayment);
+//        // ✅ Recalculate Total Amount Paid & Interest Paid
+//        BigDecimal totalAmountPaid = loanPaymentRepository.findTotalAmountPaidByLoanId(loanId).orElse(BigDecimal.ZERO);
+//        BigDecimal totalInterestPaid = loanPaymentRepository.findTotalInterestPaidByLoanId(loanId).orElse(BigDecimal.ZERO);
+//        // ✅ Update the Loan entity with new aggregated values
+//        loan.setTotalOutstandingBalance(loan.getOutstandingBalance());
+//
+//        // ✅ Update Loan Entity
+//        loanPayment.setTotalAmountPaid(totalAmountPaid);
+//        loanPayment.setInterestPaid(totalInterestPaid);
+//
+//
+//        loan.updateLoanStatus();
+//        loanRepository.save(loan);
+//
+//        return loanPaymentMapper.toDTO(loanPayment);
+//    }
 
 
     /**

@@ -1,7 +1,9 @@
 package CSCI_841_Project.backend.entity;
 
 
+import CSCI_841_Project.backend.enums.PaymentMethod;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.DecimalMin;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,6 +40,18 @@ public class  LoanPayment {
     @ManyToOne
     @JoinColumn(name = "loan_id", nullable = false, foreignKey = @ForeignKey(name = "fk_loan_payment_loan"))
     private Loan loan;
+
+    @ManyToOne
+    @JoinColumn(name = "account_id",
+            foreignKey = @ForeignKey(name = "fk_loan_payment_account"))
+    private Account account;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "payment_method", nullable = false, length = 32)
+    private PaymentMethod paymentMethod = PaymentMethod.INTERNAL_ACCOUNT;
+
+    @Column(name = "external_reference", length = 128)
+    private String externalReference;
 
     /**
      * Foreign Key linking the payment to a user.
@@ -133,6 +147,13 @@ public class  LoanPayment {
         loan.updateLoanStatus();
     }
 
+
+    // ✅ Validation: require account for methods that spend from an internal account
+//    @AssertTrue(message = "Account is required when paymentMethod is INTERNAL_ACCOUNT")
+//    private boolean isAccountPresentWhenRequired() {
+//        if (paymentMethod == null) return true; // let other validations catch null if you want
+//        return paymentMethod != PaymentMethod.INTERNAL_ACCOUNT || account != null;
+//    }
 
     // Constructor
 

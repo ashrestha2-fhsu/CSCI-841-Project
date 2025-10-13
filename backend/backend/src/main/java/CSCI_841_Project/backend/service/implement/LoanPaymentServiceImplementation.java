@@ -176,52 +176,6 @@ public class LoanPaymentServiceImplementation implements LoanPaymentService {
     }
 
 
-//    @Override
-//    @Transactional
-//    public LoanPaymentDTO makePayment(Long loanId, BigDecimal paymentAmount, BigDecimal extraPayment) {
-//        Loan loan = loanRepository.findById(loanId)
-//                .orElseThrow(() -> new NotFoundException("Loan not found"));
-//
-//        // ✅ Prevent `NullPointerException`
-//        if (paymentAmount == null) paymentAmount = BigDecimal.ZERO;
-//        if (extraPayment == null) extraPayment = BigDecimal.ZERO;
-//
-//        // ✅ Ensure at least one payment type is provided
-//        if (paymentAmount.compareTo(BigDecimal.ZERO) <= 0 && extraPayment.compareTo(BigDecimal.ZERO) <= 0) {
-//            throw new RuntimeException("You must provide either a monthly payment or an extra payment!");
-//        }
-//
-//        LoanPayment loanPayment = new LoanPayment();
-//        loanPayment.setLoan(loan);
-//        loanPayment.setUser(loan.getUser());
-//
-//        if (paymentAmount.compareTo(BigDecimal.ZERO) > 0) {
-//            processMonthlyPayment(loan, paymentAmount, loanPayment);
-//        }
-//
-//        if (extraPayment.compareTo(BigDecimal.ZERO) > 0) {
-//            loanPayment = processExtraPayment(loan, extraPayment);
-//        }
-//
-//        loanPaymentRepository.save(loanPayment);
-//        // ✅ Recalculate Total Amount Paid & Interest Paid
-//        BigDecimal totalAmountPaid = loanPaymentRepository.findTotalAmountPaidByLoanId(loanId).orElse(BigDecimal.ZERO);
-//        BigDecimal totalInterestPaid = loanPaymentRepository.findTotalInterestPaidByLoanId(loanId).orElse(BigDecimal.ZERO);
-//        // ✅ Update the Loan entity with new aggregated values
-//        loan.setTotalOutstandingBalance(loan.getOutstandingBalance());
-//
-//        // ✅ Update Loan Entity
-//        loanPayment.setTotalAmountPaid(totalAmountPaid);
-//        loanPayment.setInterestPaid(totalInterestPaid);
-//
-//
-//        loan.updateLoanStatus();
-//        loanRepository.save(loan);
-//
-//        return loanPaymentMapper.toDTO(loanPayment);
-//    }
-
-
     /**
      * ✅ Processes a **scheduled monthly payment**.
      * - Deducts the interest & principal from the outstanding balance.

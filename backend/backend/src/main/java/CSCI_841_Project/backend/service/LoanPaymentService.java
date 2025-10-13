@@ -17,8 +17,6 @@ public interface LoanPaymentService {
                               LocalDate paymentDate          // NEW (optional; null -> now)
     );
 
-//    LoanPaymentDTO makePayment(Long loanId, BigDecimal paymentAmount, BigDecimal extraPayment);
-
     List<LoanPaymentDTO> getPaymentsByLoan(Long loanId);
 
     void sendLoanPaymentReminders();

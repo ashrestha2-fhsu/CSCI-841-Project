@@ -37,20 +37,6 @@ public class LoanPaymentController {
         );
     }
 
-//    @PostMapping("/{loanId}/pay")
-//    public ResponseEntity<LoanPaymentDTO> makePayment(
-//            @PathVariable Long loanId,
-//            @RequestBody LoanPaymentRequest paymentRequest) {
-//
-//        LoanPaymentDTO paymentResponse = loanPaymentService.makePayment(
-//                loanId,
-//                paymentRequest.getPaymentAmount(),
-//                paymentRequest.getExtraPayment()
-//        );
-//
-//        return ResponseEntity.ok(paymentResponse);
-//    }
-
     @GetMapping("/{loanId}")
     public ResponseEntity<List<LoanPaymentDTO>> getPaymentsByLoan(@PathVariable Long loanId) {
         return ResponseEntity.ok(loanPaymentService.getPaymentsByLoan(loanId));

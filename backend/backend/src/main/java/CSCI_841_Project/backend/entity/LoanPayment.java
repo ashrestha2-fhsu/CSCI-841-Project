@@ -149,11 +149,11 @@ public class  LoanPayment {
 
 
     // ✅ Validation: require account for methods that spend from an internal account
-//    @AssertTrue(message = "Account is required when paymentMethod is INTERNAL_ACCOUNT")
-//    private boolean isAccountPresentWhenRequired() {
-//        if (paymentMethod == null) return true; // let other validations catch null if you want
-//        return paymentMethod != PaymentMethod.INTERNAL_ACCOUNT || account != null;
-//    }
+    @AssertTrue(message = "Account is required when paymentMethod is INTERNAL_ACCOUNT")
+    private boolean isAccountPresentWhenRequired() {
+        if (paymentMethod == null) return true; // let other validations catch null if you want
+        return paymentMethod != PaymentMethod.INTERNAL_ACCOUNT || account != null;
+    }
 
     // Constructor
 

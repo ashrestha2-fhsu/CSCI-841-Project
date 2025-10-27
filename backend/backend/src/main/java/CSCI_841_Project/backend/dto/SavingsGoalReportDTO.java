@@ -11,11 +11,13 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TransactionReportDTO {
+public class SavingsGoalReportDTO {
+
     private Long userId;
     private LocalDate startDate;
     private LocalDate endDate;
-    private BigDecimal totalIncome;
-    private BigDecimal totalExpense;
-    private List<TransactionDetailsDTO> transactions;
+    private BigDecimal totalSaved;
+    private BigDecimal totalTarget;
+    private BigDecimal progress;
+    private List<SavingsGoalDetailsDTO> savingsGoals;
 }

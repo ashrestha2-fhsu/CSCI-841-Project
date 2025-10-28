@@ -1,5 +1,6 @@
 package CSCI_841_Project.backend.repository;
 
+
 import CSCI_841_Project.backend.entity.Loan;
 import CSCI_841_Project.backend.entity.User;
 import CSCI_841_Project.backend.enums.LoanStatus;
@@ -10,7 +11,6 @@ import org.springframework.data.repository.query.Param;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 public interface LoanRepository extends JpaRepository<Loan, Long> {
 
@@ -35,16 +35,5 @@ public interface LoanRepository extends JpaRepository<Loan, Long> {
 
     // ✅ Find loans by status (ACTIVE, PAID_OFF, DEFAULTED)
     List<Loan> findByStatus(LoanStatus status);
-
-//    // ✅ Count the number of loans a user has
-//    long countByUser_UserId(Long userId);
-//
-//    // ✅ Sum all outstanding balances for a user's loans
-//    @Query("SELECT COALESCE(SUM(l.outstandingBalance), 0) FROM Loan l WHERE l.user.userId = :userId")
-//    Optional<BigDecimal> getTotalDebtByUser(@Param("userId") Long userId);
-//
-//    // ✅ Sum of all loan amounts borrowed by user
-//    @Query("SELECT COALESCE(SUM(l.amountBorrowed), 0) FROM Loan l WHERE l.user.userId = :userId")
-//    Optional<BigDecimal> getTotalLoanBorrowedByUser(@Param("userId") Long userId);
 
 }

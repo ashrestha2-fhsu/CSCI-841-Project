@@ -14,8 +14,8 @@ import ProtectedRoute from "./routes/protectedRoute";
 import Accounts from "./pages/Accounts";
 import Transactions from "./pages/transactions";
 import Budget from "./pages/budget";
-import Loan from "./pages/loans";
-
+import Loans from "./pages/loan";
+import LoanPayment from "./pages/loanPayment";
 
 const App: React.FC = () => {
   return (
@@ -37,9 +37,10 @@ SS
                 <Route path="accounts" element={<Accounts />} />
                 <Route path="transactions" element={<Transactions />} />
                 <Route path="budget" element={<Budget />} />
-                <Route path="loans" element={<Loan />} />
+                <Route path="loans" element={<Loans />} />
                 {/* You don't need an absolute duplicate like "/dashboard/profile" here */}
               </Route>
+              {/* <Route path="/loan-payments/:loanId" element={<LoanPayment />} /> */}
             </Route>
           </Routes>
         </main>

@@ -20,6 +20,8 @@ const PAYMENT_METHODS = [
   "DEBIT_CARD",
   "CREDIT_CARD",
   "DIRECT_DEPOSIT",
+  "INTERNAL_ACCOUNT",
+  "MOBILE_MONEY",
   "PAYPAL",
   "OTHER",
 ] as const;

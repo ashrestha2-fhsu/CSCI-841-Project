@@ -3,7 +3,6 @@ package CSCI_841_Project.backend.mapper;
 import CSCI_841_Project.backend.dto.LoanDTO;
 import CSCI_841_Project.backend.entity.Loan;
 import CSCI_841_Project.backend.entity.User;
-import CSCI_841_Project.backend.enums.LoanStatus;
 import org.springframework.stereotype.Component;
 
 @Component

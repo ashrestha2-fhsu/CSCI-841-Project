@@ -1,5 +1,6 @@
 package CSCI_841_Project.backend.repository;
 
+
 import CSCI_841_Project.backend.entity.LoanPayment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

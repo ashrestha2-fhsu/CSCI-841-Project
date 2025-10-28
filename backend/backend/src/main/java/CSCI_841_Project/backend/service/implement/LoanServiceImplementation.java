@@ -12,11 +12,12 @@ import CSCI_841_Project.backend.repository.LoanRepository;
 import CSCI_841_Project.backend.repository.UserRepository;
 import CSCI_841_Project.backend.service.LoanService;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -71,6 +72,7 @@ public class LoanServiceImplementation implements LoanService {
         loan.setNumberOfLoans(loan.getNumberOfLoans() + 1);
         loan.setTotalLoanBorrowed(loan.getTotalLoanBorrowed().add(loan.getAmountBorrowed()));
         loan.setTotalOutstandingBalance(loan.getTotalOutstandingBalance().add(loan.getOutstandingBalance()));
+        loan.setDateCreated(LocalDateTime.now());
 
         // ✅ Save Loan
         loan = loanRepository.save(loan);

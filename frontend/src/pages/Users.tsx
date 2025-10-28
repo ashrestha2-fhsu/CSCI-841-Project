@@ -33,7 +33,7 @@ const Users: React.FC = () => {
   const handleCreateUser = async (userData: CreateUserRequest) => {
     try {
       const newUser = await userApi.create(userData)
-      setUsers([...users, newUser])
+      setUsers(prev => [...prev, newUser])
       setSuccess('User created successfully')
       setShowForm(false)
       setTimeout(() => setSuccess(null), 3000)
@@ -46,9 +46,10 @@ const Users: React.FC = () => {
   const handleUpdateUser = async (id: number, userData: UpdateUserRequest) => {
     try {
       const updatedUser = await userApi.update(id, userData)
-      setUsers(users.map(user => user.id === id ? updatedUser : user))
+      setUsers(prev => prev.map(user => user.id === id ? updatedUser : user))
       setSuccess('User updated successfully')
       setEditingUser(null)
+      setShowForm(false)
       setTimeout(() => setSuccess(null), 3000)
     } catch (err) {
       setError('Failed to update user')
@@ -57,13 +58,10 @@ const Users: React.FC = () => {
   }
 
   const handleDeleteUser = async (id: number) => {
-    if (!window.confirm('Are you sure you want to delete this user?')) {
-      return
-    }
-
+    if (!window.confirm('Are you sure you want to delete this user?')) return
     try {
       await userApi.delete(id)
-      setUsers(users.filter(user => user.id !== id))
+      setUsers(prev => prev.filter(user => user.id !== id))
       setSuccess('User deleted successfully')
       setTimeout(() => setSuccess(null), 3000)
     } catch (err) {
@@ -80,6 +78,17 @@ const Users: React.FC = () => {
   const handleCloseForm = () => {
     setShowForm(false)
     setEditingUser(null)
+  }
+
+  // ---- Wrapper to satisfy UserForm prop: (CreateUserRequest | UpdateUserRequest) => void
+  const handleSubmit = (data: CreateUserRequest | UpdateUserRequest): void => {
+    if (editingUser) {
+      // update path
+      void handleUpdateUser(editingUser.id, data as UpdateUserRequest)
+    } else {
+      // create path
+      void handleCreateUser(data as CreateUserRequest)
+    }
   }
 
   if (loading) {
@@ -99,23 +108,14 @@ const Users: React.FC = () => {
         </p>
       </div>
 
-      {error && (
-        <div className="alert alert-error">
-          {error}
-        </div>
-      )}
-
-      {success && (
-        <div className="alert alert-success">
-          {success}
-        </div>
-      )}
+      {error && <div className="alert alert-error">{error}</div>}
+      {success && <div className="alert alert-success">{success}</div>}
 
       <div className="card">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold">User List</h2>
           <button
-            onClick={() => setShowForm(true)}
+            onClick={() => { setEditingUser(null); setShowForm(true) }}
             className="btn btn-primary"
           >
             Add New User
@@ -132,10 +132,7 @@ const Users: React.FC = () => {
       {showForm && (
         <UserForm
           user={editingUser}
-          onSubmit={editingUser ? 
-            (data) => handleUpdateUser(editingUser.id, data) : 
-            handleCreateUser
-          }
+          onSubmit={handleSubmit}   
           onCancel={handleCloseForm}
         />
       )}

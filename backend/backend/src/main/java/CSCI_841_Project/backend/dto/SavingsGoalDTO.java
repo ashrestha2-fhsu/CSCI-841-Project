@@ -1,4 +1,4 @@
-package csci812_project.backend.dto;
+package CSCI_841_Project.backend.dto;
 
 import lombok.*;
 

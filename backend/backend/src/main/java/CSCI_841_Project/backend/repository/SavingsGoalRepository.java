@@ -1,7 +1,7 @@
-package csci812_project.backend.repository;
+package CSCI_841_Project.backend.repository;
 
-import csci812_project.backend.entity.SavingsGoal;
-import csci812_project.backend.enums.SavingsGoalStatus;
+import CSCI_841_Project.backend.entity.SavingsGoal;
+import CSCI_841_Project.backend.enums.SavingsGoalStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

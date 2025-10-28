@@ -1,8 +1,8 @@
-package csci812_project.backend.dto;
+package CSCI_841_Project.backend.dto;
 
-import csci812_project.backend.enums.ContributionFrequency;
-import csci812_project.backend.enums.PriorityLevel;
-import csci812_project.backend.enums.SavingsGoalStatus;
+import CSCI_841_Project.backend.enums.ContributionFrequency;
+import CSCI_841_Project.backend.enums.PriorityLevel;
+import CSCI_841_Project.backend.enums.SavingsGoalStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

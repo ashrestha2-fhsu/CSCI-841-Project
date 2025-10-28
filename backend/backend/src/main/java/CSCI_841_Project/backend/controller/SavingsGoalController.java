@@ -1,7 +1,7 @@
-package csci812_project.backend.controller;
+package CSCI_841_Project.backend.controller;
 
-import csci812_project.backend.dto.SavingsGoalDTO;
-import csci812_project.backend.service.SavingsGoalService;
+import CSCI_841_Project.backend.dto.SavingsGoalDTO;
+import CSCI_841_Project.backend.service.SavingsGoalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,11 +1,11 @@
-package csci812_project.backend.mapper;
+package CSCI_841_Project.backend.mapper;
 
-import csci812_project.backend.dto.SavingsGoalDTO;
-import csci812_project.backend.entity.SavingsGoal;
-import csci812_project.backend.entity.User;
-import csci812_project.backend.enums.ContributionFrequency;
+import CSCI_841_Project.backend.dto.SavingsGoalDTO;
+import CSCI_841_Project.backend.entity.SavingsGoal;
+import CSCI_841_Project.backend.entity.User;
+import CSCI_841_Project.backend.enums.ContributionFrequency;
 import csci812_project.backend.enums.PriorityLevel;
-import csci812_project.backend.enums.SavingsGoalStatus;
+import CSCI_841_Project.backend.enums.SavingsGoalStatus;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;

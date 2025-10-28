@@ -4,7 +4,7 @@ import CSCI_841_Project.backend.dto.SavingsGoalDTO;
 import CSCI_841_Project.backend.entity.SavingsGoal;
 import CSCI_841_Project.backend.entity.User;
 import CSCI_841_Project.backend.enums.ContributionFrequency;
-import csci812_project.backend.enums.PriorityLevel;
+import CSCI_841_Project.backend.enums.PriorityLevel;
 import CSCI_841_Project.backend.enums.SavingsGoalStatus;
 import org.springframework.stereotype.Component;
 

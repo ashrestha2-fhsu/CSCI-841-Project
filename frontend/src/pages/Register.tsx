@@ -8,7 +8,7 @@ const Register: React.FC = () => {
   const navigate = useNavigate();
 
   const [user, setUser] = useState({
-    username: "",
+    userName: "",
     email: "",
     password: "",
     firstName: "",
@@ -48,7 +48,7 @@ const Register: React.FC = () => {
       const response = await axios.post("http://localhost:8080/api/auth/register", user);
       setSuccessMessage("✅ Registration successful! Please check your email for verification.");
       setUser({
-        username: "",
+        userName: "",
         email: "",
         password: "",
         firstName: "",
@@ -90,8 +90,8 @@ const Register: React.FC = () => {
                   <input
                     type="text"
                     id="username"
-                    name="username"
-                    value={user.username}
+                    name="userName"
+                    value={user.userName}
                     onChange={handleChange}
                     className="form-input"
                     required

@@ -1,9 +1,9 @@
-package csci812_project.backend.entity;
+package CSCI_841_Project.backend.entity;
 
-import csci812_project.backend.enums.ContributionFrequency;
-import csci812_project.backend.enums.PriorityLevel;
-import csci812_project.backend.enums.SavingsGoalStatus;
-import jakarta.persistence.*;
+import CSCI_841_Project.backend.enums.ContributionFrequency;
+import CSCI_841_Project.backend.enums.PriorityLevel;
+import CSCI_841_Project.backend.enums.SavingsGoalStatus;
+import jakarta.persistence.*; 
 import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;

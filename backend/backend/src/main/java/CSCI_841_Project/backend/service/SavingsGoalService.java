@@ -24,6 +24,7 @@ public interface SavingsGoalService {
     void deleteSavingsGoal(Long id);
 
     /** ✅ Contribute money to a savings goal */
-    SavingsGoalDTO contributeToSavings(Long savingsGoalId, BigDecimal amount);
+    SavingsGoalDTO contributeToSavings(Long savingsGoalId, BigDecimal amount, Long accountId);
+//    SavingsGoalDTO contributeToSavings(Long savingsGoalId, BigDecimal amount);
 
 }

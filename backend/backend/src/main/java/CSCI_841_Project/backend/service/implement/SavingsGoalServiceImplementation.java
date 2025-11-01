@@ -56,12 +56,10 @@ public class SavingsGoalServiceImplementation implements SavingsGoalService {
         if (savingsGoalDTO.getDateUpdated() == null) {
             savingsGoalDTO.setDateUpdated(LocalDateTime.now());
         }
-
         SavingsGoal savingsGoal = savingsGoalMapper.toEntity(savingsGoalDTO, user);
 
         return savingsGoalMapper.toDTO(savingsGoalRepository.save(savingsGoal));
     }
-
 
 
     /** ✅ Get savings goal by ID */
@@ -96,7 +94,7 @@ public class SavingsGoalServiceImplementation implements SavingsGoalService {
         savingsGoal.setAutoSave(savingsGoalDTO.isAutoSave());
         savingsGoal.setPriorityLevel(PriorityLevel.valueOf(savingsGoalDTO.getPriorityLevel()));
         savingsGoal.setContributionFrequency(ContributionFrequency.valueOf(savingsGoalDTO.getContributionFrequency()));
-        savingsGoal.setDateUpdated(LocalDate.from(LocalDateTime.now()));
+        savingsGoal.setDateUpdated(LocalDate.from(LocalDateTime.now()).atStartOfDay());
 
         return savingsGoalMapper.toDTO(savingsGoalRepository.save(savingsGoal));
     }
@@ -115,20 +113,26 @@ public class SavingsGoalServiceImplementation implements SavingsGoalService {
     /** ✅ Contribute money to a savings goal */
     @Override
     @Transactional
-    public SavingsGoalDTO contributeToSavings(Long savingsGoalId, BigDecimal amount) {
-        SavingsGoal savingsGoal = savingsGoalRepository.findById(savingsGoalId)
+    public SavingsGoalDTO contributeToSavings(Long savingsGoalId, BigDecimal amount, Long accountId) {
+        SavingsGoal goal = savingsGoalRepository.findById(savingsGoalId)
                 .orElseThrow(() -> new RuntimeException("Savings goal not found"));
-
-        savingsGoal.setCurrentAmount(savingsGoal.getCurrentAmount().add(amount));
-        savingsGoal.setDateUpdated(LocalDate.from(LocalDateTime.now()));
-
-        // ✅ If goal is reached, update status
-        if (savingsGoal.getCurrentAmount().compareTo(savingsGoal.getTargetAmount()) >= 0) {
-            savingsGoal.setStatus(SavingsGoalStatus.COMPLETED);
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
+        if (account.getBalance().compareTo(amount) < 0) {
+            throw new RuntimeException("Insufficient funds in account.");
         }
-
-        return savingsGoalMapper.toDTO(savingsGoalRepository.save(savingsGoal));
+        // Deduct from account
+        account.setBalance(account.getBalance().subtract(amount));
+        accountRepository.save(account);
+        // Add to savings
+        goal.setCurrentAmount(goal.getCurrentAmount().add(amount));
+        goal.setDateUpdated(LocalDateTime.now());
+        if (goal.getCurrentAmount().compareTo(goal.getTargetAmount()) >= 0) {
+            goal.setStatus(SavingsGoalStatus.COMPLETED);
+        }
+        return savingsGoalMapper.toDTO(savingsGoalRepository.save(goal));
     }
+
 
 
     /** ✅ Automatically contributes to all `autoSave` enabled savings goals */

@@ -35,7 +35,7 @@ public class InvestmentHistoryServiceImplementation implements InvestmentHistory
         Investment investment = investmentRepository.findById(investmentId)
                 .orElseThrow(() -> new NotFoundException("Investment not found"));
 
-        BigDecimal amountInvested = investment.getAmountInvested();
+        BigDecimal amountInvested = investment.getTotalAmountInvested();
 
         // ✅ Calculate `returnsGenerated`
         BigDecimal returnsGenerated = newCurrentValue.subtract(amountInvested);

@@ -53,8 +53,13 @@ public class SavingsGoalController {
 
     /** ✅ Contribute money to a savings goal */
     @PostMapping("/{goalId}/contribute")
-    public ResponseEntity<SavingsGoalDTO> contributeToSavings(@PathVariable Long goalId, @RequestParam BigDecimal amount) {
-        return ResponseEntity.ok(savingsGoalService.contributeToSavings(goalId, amount));
+    public ResponseEntity<SavingsGoalDTO> contributeToSavings(
+            @PathVariable Long goalId,
+            @RequestParam BigDecimal amount,
+            @RequestParam Long accountId) {
+        return ResponseEntity.ok(savingsGoalService.contributeToSavings(goalId, amount, accountId));
     }
+
+
 }
 

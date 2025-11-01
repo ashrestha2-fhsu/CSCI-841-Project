@@ -146,3 +146,18 @@
   background-color: #a51120;
   color: #f1f1f1;
 }
+
+
+.view-btn {
+  background-color: #3b82f6; /* blue */
+  color: white;
+  margin-left: 4px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.view-btn:hover {
+  background-color: #2563eb;
+}

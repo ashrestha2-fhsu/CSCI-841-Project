@@ -16,6 +16,8 @@ public class InvestmentHistoryDTO {
 
     private Long historyId;
     private Long investmentId;
+    private BigDecimal totalAmountInvested;
+    private BigDecimal amountInvested;
     private BigDecimal currentValue;
     private BigDecimal performance;
     private LocalDateTime recordedAt;

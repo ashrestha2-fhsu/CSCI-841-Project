@@ -2,15 +2,21 @@ package CSCI_841_Project.backend.service;
 
 
 import CSCI_841_Project.backend.dto.InvestmentDTO;
+import CSCI_841_Project.backend.dto.InvestmentHistoryDTO;
+import CSCI_841_Project.backend.dto.InvestmentReportDTO;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface InvestmentService {
-    InvestmentDTO addInvestment(InvestmentDTO investmentDTO);
 
-    InvestmentDTO updateInvestment(Long investmentId, InvestmentDTO investmentDTO);
+    InvestmentDTO updateInvestment(Long investmentId, InvestmentDTO dto, String username);
 
-//    void updateAllInvestments();
+    InvestmentDTO addInvestment(InvestmentDTO dto);
+
+    InvestmentDTO reinvest(Long investmentId, BigDecimal reinvestedAmount, BigDecimal reinvestedQuantity, String username);
 
     InvestmentDTO getInvestmentById(Long id);
 
@@ -21,6 +27,12 @@ public interface InvestmentService {
     void restoreInvestment(Long id);
 
     void simulateInvestmentGrowth();
+
+    InvestmentReportDTO getInvestmentReport(Long userId, LocalDate startDate, LocalDate endDate);
+
+    List<InvestmentHistoryDTO> getInvestmentHistory(Long investmentId);
+
+    Optional<InvestmentDTO> findBySymbol(Long userId, String symbol);
 
 
 }

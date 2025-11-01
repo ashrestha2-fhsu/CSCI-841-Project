@@ -35,8 +35,8 @@ public class SavingsGoalMapper {
         dto.setDeleted(savingsGoal.isDeleted());
 
 
-        dto.setDateCreated(savingsGoal.getDateCreated().atStartOfDay());
-        dto.setDateUpdated(savingsGoal.getDateUpdated().atStartOfDay());
+        dto.setDateCreated(savingsGoal.getDateCreated());
+        dto.setDateUpdated(savingsGoal.getDateUpdated());
 
         return dto;
     }
@@ -61,10 +61,10 @@ public class SavingsGoalMapper {
         savingsGoal.setDeleted(dto.isDeleted());
 
         // ✅ Ensure `dateCreated` is not null
-        savingsGoal.setDateCreated(dto.getDateCreated() != null ? dto.getDateCreated().toLocalDate() : LocalDateTime.now().toLocalDate());
+        savingsGoal.setDateCreated((dto.getDateCreated() != null ? dto.getDateCreated().toLocalDate() : LocalDateTime.now().toLocalDate()).atStartOfDay());
 
         // ✅ Ensure `dateUpdated` is not null
-        savingsGoal.setDateUpdated(dto.getDateUpdated() != null ? dto.getDateUpdated().toLocalDate() : LocalDateTime.now().toLocalDate());
+        savingsGoal.setDateUpdated((dto.getDateUpdated() != null ? dto.getDateUpdated().toLocalDate() : LocalDateTime.now().toLocalDate()).atStartOfDay());
 
         return savingsGoal;
     }

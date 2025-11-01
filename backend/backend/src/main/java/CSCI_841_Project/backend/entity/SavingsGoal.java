@@ -10,6 +10,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -58,7 +59,7 @@ public class SavingsGoal {
      * Current amount saved towards the goal.
      * Default is 0.00 and cannot be negative.
      */
-    @Column(name = "current_amount", nullable = false, precision = 15, scale = 2)
+    @Column(name = "current_amount", precision = 15, scale = 2)
     @DecimalMin(value = "0.00", message = "Current amount cannot be negative")
     private BigDecimal currentAmount = BigDecimal.ZERO;
 
@@ -114,25 +115,14 @@ public class SavingsGoal {
      * Automatically set when a new record is inserted.
      */
     @Column(name = "date_created", updatable = false)
-    private LocalDate dateCreated = LocalDate.now();
+    private LocalDateTime dateCreated ;
 
     /**
      * Timestamp for when the savings goal was last updated.
      * Automatically updates on modification.
      */
     @Column(name = "date_updated")
-    private LocalDate dateUpdated = LocalDate.now();
+    private LocalDateTime dateUpdated;
 
-    /**
-     * Lifecycle hook to update the timestamp before updating.
-     */
-    @PreUpdate
-    protected void onUpdate() {
-        this.dateUpdated = LocalDate.now();
-    }
 
-    /** ✅ Update last deposit date when a contribution is made */
-    public void updateLastDepositDate() {
-        this.lastDepositDate = LocalDate.now();
-    }
 }

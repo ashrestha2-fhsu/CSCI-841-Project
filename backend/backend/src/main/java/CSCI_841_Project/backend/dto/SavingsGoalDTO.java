@@ -22,6 +22,8 @@ public class SavingsGoalDTO {
     /** Name of the savings goal (e.g., "Vacation Fund", "Emergency Savings") */
     private String goalName;
 
+    private Long accountId;
+
     /** Target savings amount for this goal */
     private BigDecimal targetAmount;
 

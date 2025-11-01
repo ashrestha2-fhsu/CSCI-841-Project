@@ -224,7 +224,7 @@ public class ReportServiceImplementation implements ReportService {
         List<Investment> investments = investmentRepository.findByUser_UserId(userId);
         // ✅ Compute Total Investment Data
         BigDecimal totalInvested = investments.stream()
-                .map(Investment::getAmountInvested)
+                .map(Investment::getTotalAmountInvested)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         BigDecimal totalCurrentValue = investments.stream()
                 .map(Investment::getCurrentValue)
@@ -250,9 +250,9 @@ public class ReportServiceImplementation implements ReportService {
             InvestmentDetailsDTO dto = new InvestmentDetailsDTO();
             dto.setInvestmentType(investment.getInvestmentType());
             dto.setAssetName(investment.getAssetName());
-            dto.setAmountInvested(investment.getAmountInvested());
+            dto.setTotalAmountInvested(investment.getTotalAmountInvested());
             dto.setCurrentValue(investment.getCurrentValue());
-            dto.setPurchaseDate(investment.getPurchaseDate().toLocalDate()); // ✅ Convert LocalDateTime → LocalDate
+            dto.setPurchaseDate(investment.getPurchaseDate());
             dto.setLastUpdated(investment.getLastUpdated());
             dto.setPerformance(investment.getPerformance());
             return dto;
@@ -307,7 +307,7 @@ public class ReportServiceImplementation implements ReportService {
             dto.setStatus(goal.getStatus());
             dto.setPriorityLevel(goal.getPriorityLevel());
             dto.setContributionFrequency(goal.getContributionFrequency());
-            dto.setDateUpdated(goal.getDateUpdated().atStartOfDay()); // ✅ Convert LocalDate → LocalDateTime
+            dto.setDateUpdated(goal.getDateUpdated()); // ✅ Convert LocalDate → LocalDateTime
 
             return dto;
 

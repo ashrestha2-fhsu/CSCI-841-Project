@@ -1,0 +1,203 @@
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-family: Arial, sans-serif;
+}
+
+th, td {
+  padding: 12px 16px;
+  text-align: left;
+  border: 1px solid #ccc;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #f3f4f6;
+  font-weight: bold;
+  font-size: 14px;
+  color: #333;
+}
+
+tr:hover {
+  background-color: #f9f9f9;
+}
+
+button {
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+button.edit {
+  background-color: #10b981; /* Green */
+  color: white;
+  margin-right: 4px;
+}
+
+button.delete {
+  background-color: #ef4444; /* Red */
+  color: white;
+}
+
+button.edit:hover {
+  background-color: #059669;
+}
+
+button.delete:hover {
+  background-color: #dc2626;
+}
+
+.investment-add-btn {
+  background-color: #0c10eb; /* Indigo */
+  color: white;
+  padding: 8px 14px;
+  font-size: 14px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  transition: background-color 0.3s;
+  font-weight: bold;
+}
+
+.add-btn:hover {
+  background-color: #4f46e5;
+}
+
+ .investment-form-container {
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: #fef2f2; /* soft red/pink */
+  padding: 20px;
+  border-radius: 10px;
+  overflow-y: auto;
+}
+
+.investment-form-container form {
+  display: flex;
+  flex-direction: column;
+}
+
+.investment-form-container label {
+  font-weight: bold;
+  margin-top: 12px;
+}
+
+.investment-form-container input,
+.investment-form-container select {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-top: 5px;
+}
+
+.investment-form-container button {
+  margin-top: 20px;
+  padding: 12px;
+  background-color: #10b981; /* green */
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.investment-form-container button:hover {
+  background-color: #059669;
+} 
+
+
+
+/* hhfhhdhdhhdhhdhd */
+.investment-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two equal columns */
+  gap: 16px 24px; /* Row and column spacing */
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 24px;
+  background-color: #fef2f2; /* Soft pink */
+  border-radius: 10px;
+}
+
+/* Form group: one label + one input/select */
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #111827; /* Slightly darker for contrast */
+}
+
+.form-group input,
+.form-group select {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  background-color: #fff;
+}
+
+/* Submit and cancel buttons */
+.form-actions {
+  grid-column: 1 / -1; /* Span both columns */
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.btn {
+  padding: 10px 24px;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.btn-save {
+  background-color: #3b82f6; /* Blue */
+  color: white;
+}
+
+.btn-save:hover {
+  background-color: #2563eb;
+}
+
+.btn-cancel {
+  background-color: #ef4444; /* Red */
+  color: white;
+}
+
+.btn-cancel:hover {
+  background-color: #dc2626;
+}
+
+/* Responsive: Stack form on smaller screens */
+@media (max-width: 768px) {
+  .investment-form-grid {
+    grid-template-columns: 1fr; /* Single column */
+  }
+
+  .form-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}
+
+
+
+
+

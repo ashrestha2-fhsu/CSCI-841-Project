@@ -1,5 +1,6 @@
 package CSCI_841_Project.backend.entity;
 
+import CSCI_841_Project.backend.enums.AssetSymbol;
 import CSCI_841_Project.backend.enums.InvestmentType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
@@ -12,6 +13,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -55,13 +57,22 @@ public class Investment {
     @NotBlank(message = "Asset name is required")
     private String assetName;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "asset_symbol", length = 20)
+    private AssetSymbol assetSymbol;
+
     /**
      * Initial amount invested.
      * Cannot be negative.
      */
     @Column(name = "amount_invested", nullable = false, precision = 15, scale = 2)
     @DecimalMin(value = "0.00", message = "Investment amount cannot be negative")
-    private BigDecimal amountInvested;
+    private BigDecimal totalAmountInvested;
+
+    @Column(name = "quantity", precision = 15, scale = 6)
+    @DecimalMin(value = "0.000001", message = "Quantity must be positive")
+    private BigDecimal quantity;
+
 
     /**
      * Current market value of the investment.
@@ -71,14 +82,17 @@ public class Investment {
     @DecimalMin(value = "0.00", message = "Current value cannot be negative")
     private BigDecimal currentValue = BigDecimal.ZERO;
 
+    @Column(name = "currency", length = 10)
+    private String currency;
+
     /**
      * Date when the investment was purchased.
      */
     @Column(name = "purchase_date", nullable = false)
     @NotNull(message = "Purchase date is required")
-    private LocalDateTime purchaseDate;
+    private LocalDate purchaseDate;
 
-    @Column(name = "performance", precision = 5, scale = 2)
+    @Column(name = "performance", precision = 10, scale = 4)
     private BigDecimal performance;
 
     /**
@@ -103,19 +117,21 @@ public class Investment {
     private LocalDateTime dateCreated = LocalDateTime.now();
 
 
+
     @PreUpdate
     private void beforeUpdate() {  // ✅ Only ONE @PreUpdate method now
         this.lastUpdated = LocalDateTime.now();
         calculatePerformance();
     }
 
+
     /**
      * ✅ Performance calculation logic.
      */
     private void calculatePerformance() {
-        if (amountInvested != null && amountInvested.compareTo(BigDecimal.ZERO) > 0) {
-            this.performance = currentValue.subtract(amountInvested)
-                    .divide(amountInvested, 2, RoundingMode.HALF_UP)
+        if (totalAmountInvested != null && totalAmountInvested.compareTo(BigDecimal.ZERO) > 0) {
+            this.performance = currentValue.subtract(totalAmountInvested)
+                    .divide(totalAmountInvested, 2, RoundingMode.HALF_UP)
                     .multiply(BigDecimal.valueOf(100));
         } else {
             this.performance = BigDecimal.ZERO;
@@ -129,7 +145,11 @@ public class Investment {
     protected void onCreate() {
         this.lastUpdated = LocalDateTime.now();
         if (this.currentValue == null) {
-            this.currentValue = this.amountInvested;
+            this.currentValue = this.totalAmountInvested;
         }
+        calculatePerformance(); // ✅ Add this!
     }
+
+
+
 }

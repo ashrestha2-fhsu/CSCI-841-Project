@@ -14,9 +14,16 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
     /** ✅ Get all subscriptions for a user */
     List<Subscription> findByUser_UserId(Long userId);
 
+    List<Subscription> findByNextBillingDateBeforeAndStatusAndAutoRenewIsTrue(
+            LocalDateTime cutoff, SubscriptionStatus status);
+
+
     /** ✅ Get all active subscriptions */
     List<Subscription> findByStatus(SubscriptionStatus status);
 
     /** ✅ Find subscriptions due for billing */
     List<Subscription> findByNextBillingDateBeforeAndStatus(LocalDateTime now, SubscriptionStatus status);
+
+
+
 }

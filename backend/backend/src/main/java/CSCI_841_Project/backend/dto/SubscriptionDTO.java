@@ -26,7 +26,7 @@ public class SubscriptionDTO {
     private LocalDateTime nextBillingDate;
 
     /** Payment method (Bank Account, Credit Card, etc.) */
-//    private String paymentMethod;
+    private String paymentMethodName;
     private Long paymentMethodId;
 
     /** Auto-renew status */

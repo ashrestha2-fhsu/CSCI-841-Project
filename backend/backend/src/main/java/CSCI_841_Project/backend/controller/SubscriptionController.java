@@ -2,59 +2,65 @@ package CSCI_841_Project.backend.controller;
 
 import CSCI_841_Project.backend.dto.SubscriptionDTO;
 import CSCI_841_Project.backend.service.SubscriptionService;
+import CSCI_841_Project.backend.service.implement.SubscriptionServiceImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/subscriptions")
 public class SubscriptionController {
 
-    @Autowired
-    private SubscriptionService subscriptionService;
+    @Autowired private SubscriptionServiceImplementation service;
 
-
-    /**
-     * ✅ Create a New Subscription
-     */
     @PostMapping
-    public ResponseEntity<SubscriptionDTO> createSubscription(@RequestBody SubscriptionDTO dto) {
-        return ResponseEntity.ok(subscriptionService.createSubscription(dto));
+    public ResponseEntity<SubscriptionDTO> create(@RequestBody SubscriptionDTO dto) {
+        return ResponseEntity.ok(service.createSubscription(dto));
     }
 
-    /**
-     * ✅ Get Subscription by ID
-     */
-    @GetMapping("/{subscriptionId}")
-    public ResponseEntity<SubscriptionDTO> getSubscriptionById(@PathVariable Long subscriptionId) {
-        return ResponseEntity.ok(subscriptionService.getSubscriptionById(subscriptionId));
+    @GetMapping("/{id}")
+    public ResponseEntity<SubscriptionDTO> get(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getSubscriptionById(id));
     }
 
-    /**
-     * ✅ Get All Subscriptions for a User
-     */
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<SubscriptionDTO>> getSubscriptionsByUser(@PathVariable Long userId) {
-        return ResponseEntity.ok(subscriptionService.getSubscriptionsByUser(userId));
+    public ResponseEntity<List<SubscriptionDTO>> listByUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(service.getSubscriptionsByUser(userId));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<SubscriptionDTO> update(@PathVariable Long id, @RequestBody SubscriptionDTO dto) {
+        return ResponseEntity.ok(service.updateSubscription(id, dto));
+    }
+
+    @PutMapping("/{id}/pause")
+    public ResponseEntity<Void> pause(@PathVariable Long id) {
+        service.pauseSubscription(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}/resume")
+    public ResponseEntity<Void> resume(@PathVariable Long id) {
+        service.resumeSubscription(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}/cancel")
+    public ResponseEntity<Void> cancel(@PathVariable Long id) {
+        service.cancelSubscription(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{id}/payNow")
+    public ResponseEntity<SubscriptionDTO> payNow(
+            @PathVariable Long id,
+            @RequestParam Long accountId,
+            @RequestParam BigDecimal amount) {
+        return ResponseEntity.ok(service.payNow(id, accountId, amount));
     }
 
 
-    /**
-     * ✅ Update an Existing Subscription
-     */
-    @PutMapping("/{subscriptionId}")
-    public ResponseEntity<SubscriptionDTO> updateSubscription(@PathVariable Long subscriptionId, @RequestBody SubscriptionDTO dto) {
-        return ResponseEntity.ok(subscriptionService.updateSubscription(subscriptionId, dto));
-    }
-
-    /**
-     * ✅ Cancel a Subscription
-     */
-    @PutMapping("/{subscriptionId}/cancel")
-    public ResponseEntity<String> cancelSubscription(@PathVariable Long subscriptionId) {
-        subscriptionService.cancelSubscription(subscriptionId);
-        return ResponseEntity.ok("Subscription cancelled successfully.");
-    }
 }

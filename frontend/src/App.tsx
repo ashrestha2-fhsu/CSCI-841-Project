@@ -17,6 +17,9 @@ import Budget from "./pages/budget";
 import Loans from "./pages/loans";
 import Investment from "./pages/investments";
 import SavingGoal from "./pages/savingsGoal";
+import Subscriptions from "./pages/subscriptions";
+
+
 
 const App: React.FC = () => {
   return (
@@ -39,8 +42,9 @@ SS
                 <Route path="transactions" element={<Transactions />} />
                 <Route path="budget" element={<Budget />} />
                 <Route path="loans" element={<Loans />} />
-                 <Route path="investments" element={<Investment />} />
-                  <Route path="savingsGoal" element={<SavingGoal />} />
+                <Route path="investments" element={<Investment />} />
+                <Route path="savingsGoal" element={<SavingGoal />} />
+                <Route path="subscriptions" element={<Subscriptions />} />
 
                 {/* You don't need an absolute duplicate like "/dashboard/profile" here */}
               </Route>

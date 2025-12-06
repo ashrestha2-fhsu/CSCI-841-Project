@@ -1,0 +1,304 @@
+
+/* ===========================
+   SAVINGS GOAL — CARD PAGE
+   (savingGoal.tsx)
+   =========================== */
+
+.savings-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.savings-container .header {
+  margin-bottom: 30px;
+  color: #1f2937;
+  font-weight: 800;
+}
+
+.savings-actions {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: right;
+  gap: 15px;
+  margin-top: -10px;
+}
+
+.savings-actions button {
+  background-color: #28a745;
+  color: #fff;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 700;
+}
+.savings-actions button:hover { background-color: #218838; }
+
+.savings-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.savings-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.12);
+  padding: 16px;
+  width: 260px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.savings-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0,0,0,.15);
+}
+
+.savings-card h3 {
+  margin: 8px 0 6px;
+  color: #111827;
+  font-weight: 700;
+}
+
+.savings-line {
+  margin: 4px 0 10px;
+  color: #374151;
+  font-size: 14px;
+}
+
+.card-btn { display: flex; justify-content: flex-start; margin-bottom: 8px; }
+.card-btn button {
+  background: #0d6efd;
+  color: #fff;
+  border: 0;
+  padding: 8px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 700;
+}
+.card-btn button:hover { background: #0b5ed7; }
+
+.savings-details {
+  margin-top: 10px;
+  padding: 12px;
+  background: #f8fafc;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+}
+.savings-details table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.savings-details td { padding: 8px; border-bottom: 1px solid #eef2f7; }
+.savings-details tr:last-child td { border-bottom: 0; }
+
+.savings-progress {
+  margin-top: 10px;
+  width: 100%;
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.savings-progress__fill { height: 100%; background: #0d6efd; border-radius: 999px; }
+
+.err { color: #dc2626; }
+.muted { color: #6b7280; }
+
+/* ===========================
+   SAVINGS GOAL — TABLE MODAL
+   (savingsGoalDetails.tsx)
+   =========================== */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modals {
+  position: relative;
+  width: 1200px;                     /* wider so Actions fit in one line */
+  max-width: calc(100% - 48px);
+  max-height: 80vh;
+  overflow: auto;
+  background: #f0e3e3;               /* match Accounts tone */
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.25);
+  padding: 22px 24px 16px;
+}
+
+.modals .header {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 800;
+  margin: 4px 0 14px;
+  color: #111827;
+}
+
+.closes-btn {
+  position: absolute;
+  right: 16px;
+  top: 14px;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 50%;
+  background: #dc3545;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 34px;
+  font-weight: 700;
+}
+
+.accounts-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 16px;
+  font-size: 13px;
+  background: #fff;
+}
+.accounts-table th,
+.accounts-table td {
+  border: 1px solid #ddd;
+  padding: 10px 12px;
+  text-align: left;
+  white-space: nowrap;
+}
+.accounts-table th {
+  background: #e85b5b;
+  color: #111827;
+  font-weight: 800;
+  text-align: center;
+  font-size: 14px;
+}
+.accounts-table td.num,
+.accounts-table th.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* inline buttons in Actions column (order: Edit, Delete, Contribute) */
+.accounts-table td button {
+  padding: 6px 10px;
+  margin: 0 4px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 12px;
+}
+.accounts-table td button:nth-child(1) { background: #0d6efd; color: #fff; }
+.accounts-table td button:nth-child(1):hover { background: #0b5ed7; }
+.accounts-table td button:nth-child(2) { background: #dc3545; color: #fff; }
+.accounts-table td button:nth-child(2):hover { background: #c82333; }
+.accounts-table td button:nth-child(3) { background: #28a745; color: #fff; }
+.accounts-table td button:nth-child(3):hover { background: #218838; }
+
+.form-buttons { text-align: center; }
+.cancel-btn {
+  background: #6b7280;
+  color: #fff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ===========================
+   SAVINGS GOAL — FORM MODAL
+   (savingsGoalForm.tsx)
+   =========================== */
+
+/* overlay from component: .fixed.inset-0 */
+.fixed.inset-0 {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+}
+
+/* modal box selector matches the classes used in JSX */
+.bg-white.w-full.max-w-lg {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0,0,0,.18);
+  width: 100%;
+  max-width: 840px;                  /* wider so 2-column fields breathe */
+  padding: 24px;
+}
+
+/* header row in form modal */
+.text-xl { font-size: 20px; font-weight: 800; color: #111827; }
+.p-2 { padding: .5rem; }
+.rounded-lg { border-radius: 10px; }
+.hover\:bg-gray-100:hover { background: #f3f4f6; }
+
+/* make the form itself a responsive 2-column grid */
+.grid.gap-3 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 14px;
+}
+
+/* inputs/selects in the form */
+.border { border: 1px solid #d1d5db; }
+.rounded-lg { border-radius: 10px; }
+.px-3 { padding-left: .75rem; padding-right: .75rem; }
+.py-2 { padding-top: .5rem; padding-bottom: .5rem; }
+input.border, select.border {
+  width: 100%;
+  font-size: 14px;
+  height: 40px;
+}
+input.border:focus, select.border:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 1px #2563eb;
+}
+
+/* checkbox row spans both columns */
+.inline-flex.items-center { grid-column: span 2; gap: 8px; font-size: 13px; color: #111827; }
+
+/* button row spans both columns and centers */
+.flex.gap-2.mt-2 { grid-column: span 2; display: flex; gap: 10px; margin-top: 4px; }
+
+/* blue Primary, gray Secondary (matches component classes) */
+.bg-blue-600 { background: #0d6efd; color:#fff; border:0; }
+.bg-blue-600:hover { background: #0b5ed7; }
+.bg-gray-200 { background: #e5e7eb; color:#111827; border:0; }
+.bg-gray-200:hover { background: #d1d5db; }
+.rounded-xl { border-radius: 12px; }
+.disabled\:opacity-60:disabled { opacity: .6; cursor: not-allowed; }
+
+/* close icon in the form header */
+button[aria-label="Close"] {
+  border: none;
+  background: #eef2f7;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  font-weight: 800;
+  color: #111827;
+  cursor: pointer;
+}
+button[aria-label="Close"]:hover { background: #e5e7eb; }
+
+/* stack form fields on narrow screens */
+@media (max-width: 640px) {
+  .grid.gap-3 { grid-template-columns: 1fr; }
+  .inline-flex.items-center,
+  .flex.gap-2.mt-2 { grid-column: span 1; }
+}

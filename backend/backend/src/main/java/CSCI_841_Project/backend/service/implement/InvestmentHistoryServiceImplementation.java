@@ -57,6 +57,8 @@ public class InvestmentHistoryServiceImplementation implements InvestmentHistory
         // ✅ Save Investment History Record
         InvestmentHistory history = new InvestmentHistory();
         history.setInvestment(investment);
+        history.setTotalAmountInvested(amountInvested);
+        history.setAmountInvested(amountInvested);
         history.setCurrentValue(newCurrentValue);
         history.setPerformance(performance);
         history.setReturnsGenerated(returnsGenerated);

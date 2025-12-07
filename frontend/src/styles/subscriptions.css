@@ -1,0 +1,373 @@
+
+/* ========== Page Shell ========== */
+.subscriptions-container,
+.savings-container {           /* keep compatibility with existing usage */
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+}
+
+.header {
+  margin-bottom: 30px;
+  color: #1f2937;
+  font-weight: 800;
+}
+
+/* ========== Header Actions ========== */
+.savings-actions {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: right;
+  gap: 15px;
+  margin-top: -10px;
+}
+.savings-actions button {
+  background-color: #28a745;
+  color: white;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.savings-actions button:hover { background-color: #218838; }
+
+/* ========== Messages ========== */
+.err { color: #dc2626; }
+.muted { color: #6b7280; }
+
+/* ========== Card Grid ========== */
+.savings-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.savings-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.12);
+  padding: 16px;
+  width: 260px;                 /* ~4 per row on typical desktop widths */
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.savings-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+.savings-card h3 {
+  margin: 8px 0 6px 0;
+  color: #111827;
+  font-weight: 700;
+}
+.savings-line {
+  margin: 4px 0 10px 0;
+  color: #374151;
+  font-size: 14px;
+}
+
+/* Card primary button */
+.card-btn {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 8px;
+}
+.card-btn button {
+  background: #0d6efd;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.card-btn button:hover { background: #0b5ed7; }
+
+/* Expanded card details */
+.savings-details {
+  margin-top: 10px;
+  padding: 12px;
+  background: #f8fafc;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+}
+.savings-details table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.savings-details td {
+  padding: 8px;
+  vertical-align: middle;
+  border-bottom: 1px solid #eef2f7;
+}
+.savings-details tr:last-child td { border-bottom: 0; }
+
+/* Row action buttons under card details */
+.row-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.btn-sm {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 12px;
+}
+.btn-sm:disabled { opacity: .6; cursor: not-allowed; }
+.btn-blue  { background:#0d6efd; color:#fff; }
+.btn-blue:hover  { background:#0b5ed7; }
+.btn-green { background:#28a745; color:#fff; }
+.btn-green:hover { background:#218838; }
+.btn-red   { background:#dc3545; color:#fff; }
+.btn-red:hover   { background:#c82333; }
+
+/* ========== Modals (shared) ========== */
+.modal-overlay,
+.savings-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Generic modal body */
+.modal,
+.savings-modal {
+  position: relative;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  padding: 22px 24px 16px;
+  width: 100%;
+  max-width: 720px;
+  max-height: 80vh;
+  overflow: hidden;
+}
+
+/* Optional width helpers */
+.modal--wide   { max-width: 900px; }
+.modal--narrow { max-width: 520px; }
+
+.s-title {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 800;
+  margin: 4px 0 14px;
+  color: #111827;
+}
+
+.closes-btn,
+.s-close {
+  position: absolute;
+  left: 16px;
+  top: 14px;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 50%;
+  background: #f3f4f6;
+  color: #111827;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 34px;
+}
+.closes-btn:hover,
+.s-close:hover { background: #e5e7eb; }
+
+.s-error { color:#dc2626; margin-bottom:10px; }
+
+/* Simple form grid */
+.form-grid {
+  display: grid;
+  gap: 12px;
+}
+.inline-flex {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Inputs */
+.form-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-weight: 600;
+  color: #111827;
+}
+.form-grid input,
+.form-grid select {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+}
+.form-grid input:focus,
+.form-grid select:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 1px #2563eb;
+}
+
+/* Form footer buttons */
+.form-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 6px;
+}
+.btn-save {
+  background-color: #16a34a;
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.btn-save:hover { background-color: #15803d; }
+.btn-gray {
+  background:#e5e7eb;
+  color:#111827;
+  border:none;
+  padding:8px 12px;
+  border-radius:8px;
+  font-weight:700;
+  cursor:pointer;
+}
+.btn-gray:hover { background:#d1d5db; }
+
+/* ========== Table Modal (All Subscriptions) ========== */
+.savings-table-wrap {
+  overflow: auto;
+  max-height: calc(80vh - 110px); /* keep header and footer visible */
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #fff;
+  margin-top: 6px;
+}
+
+.savings-table {
+  width: 100%;
+  min-width: 920px;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 14px;
+  background: #fff;
+}
+
+.savings-table thead th {
+  position: sticky;
+  top: 0;
+  background: #f8fafc;
+  color: #111827;
+  font-weight: 700;
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid #e5e7eb;
+  white-space: nowrap;
+}
+
+.savings-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #eef2f7;
+  color: #111827;
+  vertical-align: middle;
+  background: #fff;
+}
+.savings-table tbody tr:nth-child(even) td { background: #fbfdff; }
+
+.savings-table td.num,
+.savings-table th.num { text-align: right; font-variant-numeric: tabular-nums; }
+.savings-table .actions-col { width: 280px; text-align: left; }
+
+.savings-table .truncate {
+  max-width: 280px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.savings-table .empty {
+  text-align: center;
+  color: #6b7280;
+  padding: 18px;
+}
+
+/* Footer of table modal */
+.s-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 10px;
+}
+
+/* ========== Status Badges ========== */
+.badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  background: #e5e7eb;
+  color: #111827;
+}
+.badge.active    { background:#dcfce7; color:#065f46; }
+.badge.paused    { background:#fff7ed; color:#9a3412; }
+.badge.cancelled { background:#fee2e2; color:#991b1b; }
+.badge.past_due  { background:#e0f2fe; color:#075985; }
+
+/* ========== Utilities ========== */
+.btn { padding: 0.5rem 1rem; border-radius: 0.6rem; font-weight: 500; cursor: pointer; }
+.btn-primary { background-color: #2563eb; color: white; }
+.btn-primary:hover { background-color: #1d4ed8; }
+
+/* Responsive tweak: keep nice wrapping */
+@media (max-width: 640px) {
+  .savings-card { width: 100%; }
+}
+
+
+/* ppppppppppppppppppppppppppppppppp */
+/* Wider modal for the list */
+.modal--wide {
+  max-width: 1100px;            /* was 720px; gives room for buttons */
+}
+
+/* Keep table from crushing columns; more horizontal space */
+.savings-table {
+  min-width: 1040px;            /* ensure all columns fit comfortably */
+}
+
+/* Make Actions column wider */
+.savings-table .actions-col {
+  width: 420px;                  /* adjust as needed (360–480px) */
+  text-align: left;
+}
+
+/* Keep action buttons on one line inside the cell */
+.row-actions.no-wrap {
+  display: flex;
+  flex-wrap: nowrap;             /* force single line */
+  gap: 8px;
+}
+
+/* If you still see wrapping on very small screens, you can shrink buttons a hair */
+.row-actions.no-wrap .btn-sm {
+  padding: 6px 9px;
+  font-size: 12px;
+}

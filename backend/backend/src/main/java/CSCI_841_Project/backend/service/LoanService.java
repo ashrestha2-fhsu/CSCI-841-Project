@@ -3,7 +3,6 @@ package CSCI_841_Project.backend.service;
 import CSCI_841_Project.backend.dto.LoanDTO;
 import CSCI_841_Project.backend.entity.User;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public interface LoanService {

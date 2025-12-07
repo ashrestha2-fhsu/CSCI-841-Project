@@ -6,6 +6,8 @@ public enum PaymentMethod {
     CREDIT_CARD,
     BANK_TRANSFER,
     DIRECT_DEPOSIT,
+    INTERNAL_ACCOUNT,
+    MOBILE_MONEY,
     PAYPAL,
     OTHER
 }

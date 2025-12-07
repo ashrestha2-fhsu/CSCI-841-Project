@@ -18,7 +18,7 @@ public class InvestmentDetailsDTO {
 
     private InvestmentType investmentType;
     private String assetName;
-    private BigDecimal amountInvested;
+    private BigDecimal totalAmountInvested;
     private BigDecimal currentValue;
     private LocalDate purchaseDate;
     private LocalDateTime lastUpdated;

@@ -1,22 +1,42 @@
+// src/components/LoanForm.tsx
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../services/axiosInstance";
-import { Loan } from "../types";
-import "../styles/loan.css";
+
+type LoanStatus = "ACTIVE" | "PAID_OFF" | "DEFAULTED";
+
+interface Loan {
+  loanId: number;
+  lenderName: string;
+  amountBorrowed: number | string;
+  numberOfYears: number | string;
+  interestRate: number | string;
+  dueDate: string;
+  status: LoanStatus;
+}
+
+interface LoanFormState {
+  lenderName: string;
+  amountBorrowed: string | number;
+  numberOfYears: string | number;
+  interestRate: string | number;
+  dueDate: string;
+  status: LoanStatus;
+}
 
 interface LoanFormProps {
-  initialData: Loan | null;
+  initialData?: Loan | null;
   onClose: () => void;
   onSuccess: () => void;
 }
 
 const LoanForm: React.FC<LoanFormProps> = ({ initialData, onClose, onSuccess }) => {
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<LoanFormState>({
     lenderName: "",
     amountBorrowed: "",
-    numberOfYears: 0,
+    numberOfYears: "",
     interestRate: "",
     dueDate: "",
-    status: "ACTIVE" as Loan["status"],
+    status: "ACTIVE",
   });
 
   useEffect(() => {
@@ -32,17 +52,23 @@ const LoanForm: React.FC<LoanFormProps> = ({ initialData, onClose, onSuccess }) 
     }
   }, [initialData]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
-    setForm({ ...form, [name]: value });
+    setForm({ ...form, [name]: value } as LoanFormState);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const profile = await axiosInstance.get("/users/profile");
+      const profile = await axiosInstance.get<{ userId: number }>("/users/profile");
       const userId = profile.data.userId;
-      const payload = { ...form, userId };
+
+      const payload = {
+        ...form,
+        userId,
+      };
 
       if (initialData) {
         await axiosInstance.put(`/loans/${initialData.loanId}`, payload);
@@ -68,39 +94,92 @@ const LoanForm: React.FC<LoanFormProps> = ({ initialData, onClose, onSuccess }) 
           <table className="form-table">
             <tbody>
               <tr>
-                <td><label>Lender:</label></td>
-                <td><input name="lenderName" value={form.lenderName} onChange={handleChange} required /></td>
-                <td><label>Years:</label></td>
-                <td><input type="number" name="numberOfYears" value={form.numberOfYears} onChange={handleChange} required /></td>
-              </tr>
-              <tr>
-                <td><label>Borrowed:</label></td>
-                <td><input type="number" name="amountBorrowed" value={form.amountBorrowed} onChange={handleChange} required /></td>
-                <td><label>Rate (%):</label></td>
-                <td><input type="number" name="interestRate" value={form.interestRate} onChange={handleChange} required /></td>
-              </tr>
-              <tr>
-                <td><label>Status:</label></td>
                 <td>
-                  <select name="status" value={form.status} onChange={handleChange}>
+                  <label>Lender:</label>
+                </td>
+                <td>
+                  <input
+                    name="lenderName"
+                    value={form.lenderName}
+                    onChange={handleChange}
+                    required
+                  />
+                </td>
+                <td>
+                  <label>Years:</label>
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    name="numberOfYears"
+                    value={form.numberOfYears}
+                    onChange={handleChange}
+                    required
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <label>Borrowed:</label>
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    name="amountBorrowed"
+                    value={form.amountBorrowed}
+                    onChange={handleChange}
+                    required
+                  />
+                </td>
+                <td>
+                  <label>Rate (%):</label>
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    name="interestRate"
+                    value={form.interestRate}
+                    onChange={handleChange}
+                    required
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <label>Status:</label>
+                </td>
+                <td>
+                  <select
+                    name="status"
+                    value={form.status}
+                    onChange={handleChange}
+                  >
                     <option value="ACTIVE">ACTIVE</option>
                     <option value="PAID_OFF">PAID OFF</option>
                     <option value="DEFAULTED">DEFAULTED</option>
                   </select>
                 </td>
-                <td><label>Due Date:</label></td>
-                <td><input type="date" name="dueDate" value={form.dueDate} onChange={handleChange} required /></td>
+                <td>
+                  <label>Due Date:</label>
+                </td>
+                <td>
+                  <input
+                    type="date"
+                    name="dueDate"
+                    value={form.dueDate}
+                    onChange={handleChange}
+                    required
+                  />
+                </td>
               </tr>
             </tbody>
           </table>
           <div className="loan-form-buttons">
-            <button type="submit" className="btn btn-save">{initialData ? "Update" : "Save"}</button>
-            <button type="button" className="btn btn-cancel" onClick={onClose}>Cancel</button>
-          </div>
-          <div className="form-buttons">
-            <button type="submit">💾 Save</button>
-            <button type="button" onClick={onClose}>
-              ❌ Cancel
+            <button type="submit" className="btn btn-save">
+              {initialData ? "Update" : "Save"}
+            </button>
+            <button type="button" className="btn btn-cancel" onClick={onClose}>
+              Cancel
             </button>
           </div>
         </form>

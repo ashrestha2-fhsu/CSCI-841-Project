@@ -1,20 +1,68 @@
-import React, { useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 const Navbar: React.FC = () => {
   const location = useLocation()
+  const navigate = useNavigate()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+
+  // Check if user is authenticated
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    setIsAuthenticated(!!token)
+
+    // Listen for storage changes (when user logs in/out in another tab)
+    const handleStorageChange = () => {
+      const token = localStorage.getItem('token')
+      setIsAuthenticated(!!token)
+    }
+
+    window.addEventListener('storage', handleStorageChange)
+    return () => window.removeEventListener('storage', handleStorageChange)
+  }, [])
+
+  // Also check on location change (when navigating)
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    setIsAuthenticated(!!token)
+  }, [location])
 
   const isActive = (path: string) => {
     return location.pathname === path
   }
 
-  const navItems = [
+  const handleLogout = () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('role')
+    setIsAuthenticated(false)
+    navigate('/')
+  }
+
+  // Base navigation items (always shown)
+  const baseNavItems = [
     { path: '/', label: 'Home', icon: '🏠' },
     { path: '/about', label: 'About', icon: 'ℹ️' },
-    { path: '/login', label: 'Login', icon: '🔑' },
-    { path: '/register', label: 'Register', icon: '📝' },
   ]
+
+  // Conditional navigation items
+  const authNavItems = isAuthenticated
+    ? [
+        { path: '/dashboard', label: 'Dashboard', icon: '📊' },
+        { 
+          path: '#', 
+          label: 'Logout', 
+          icon: '🚪', 
+          onClick: handleLogout,
+          isButton: true 
+        },
+      ]
+    : [
+        { path: '/login', label: 'Login', icon: '🔑' },
+        { path: '/register', label: 'Register', icon: '📝' },
+      ]
+
+  const navItems = [...baseNavItems, ...authNavItems]
 
   return (
     <nav className="navbar">
@@ -26,15 +74,37 @@ const Navbar: React.FC = () => {
 
         {/* Desktop Navigation */}
         <ul className="navbar-nav">
-          {navItems.map((item) => (
+          {(navItems as (typeof baseNavItems[0] & { isButton?: boolean; onClick?: () => void })[]).map((item) => (
             <li key={item.path}>
-              <Link
-                to={item.path}
-                className={isActive(item.path) ? 'active' : ''}
-              >
-                <span className="icon">{item.icon}</span>
-                <span>{item.label}</span>
-              </Link>
+              {'isButton' in item && item.isButton ? (
+                <button
+                  onClick={item.onClick}
+                  className={isActive(item.path) ? 'active' : ''}
+                  style={{ 
+                    background: 'none', 
+                    border: 'none', 
+                    cursor: 'pointer',
+                    color: 'inherit',
+                    fontSize: 'inherit',
+                    fontFamily: 'inherit',
+                    padding: '0.5rem 1rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem'
+                  }}
+                >
+                  <span className="icon">{item.icon}</span>
+                  <span>{item.label}</span>
+                </button>
+              ) : (
+                <Link
+                  to={item.path}
+                  className={isActive(item.path) ? 'active' : ''}
+                >
+                  <span className="icon">{item.icon}</span>
+                  <span>{item.label}</span>
+                </Link>
+              )}
             </li>
           ))}
         </ul>
@@ -57,16 +127,43 @@ const Navbar: React.FC = () => {
       {/* Mobile Navigation */}
       <div className={`mobile-menu ${isMenuOpen ? 'active' : ''}`}>
         <ul className="navbar-nav">
-          {navItems.map((item) => (
+          {navItems.map((item: any) => (
             <li key={item.path}>
-              <Link
-                to={item.path}
-                className={isActive(item.path) ? 'active' : ''}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <span className="icon">{item.icon}</span>
-                <span>{item.label}</span>
-              </Link>
+              {item.isButton ? (
+                <button
+                  onClick={() => {
+                    if (typeof item.onClick === 'function') item.onClick()
+                    setIsMenuOpen(false)
+                  }}
+                  className={isActive(item.path) ? 'active' : ''}
+                  style={{ 
+                    background: 'none', 
+                    border: 'none', 
+                    cursor: 'pointer',
+                    color: 'inherit',
+                    fontSize: 'inherit',
+                    fontFamily: 'inherit',
+                    padding: '0.5rem 1rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    width: '100%',
+                    textAlign: 'left'
+                  }}
+                >
+                  <span className="icon">{item.icon}</span>
+                  <span>{item.label}</span>
+                </button>
+              ) : (
+                <Link
+                  to={item.path}
+                  className={isActive(item.path) ? 'active' : ''}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <span className="icon">{item.icon}</span>
+                  <span>{item.label}</span>
+                </Link>
+              )}
             </li>
           ))}
         </ul>

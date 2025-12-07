@@ -1,15 +1,12 @@
 package CSCI_841_Project.backend.controller;
 
 import CSCI_841_Project.backend.dto.LoanDTO;
-import CSCI_841_Project.backend.dto.LoanPaymentRequest;
 import CSCI_841_Project.backend.service.LoanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/loans")

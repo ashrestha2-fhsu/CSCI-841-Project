@@ -168,7 +168,7 @@ const DashboardLayout: React.FC = () => {
             <li><NavLink to="/dashboard/transactions">Transactions</NavLink></li>
             <li><NavLink to="/dashboard/budget">My Budgets</NavLink></li>
             <li><NavLink to="/dashboard/loans">Loans</NavLink></li>
-            <li><NavLink to="/dashboard/savings">My Savings Goals</NavLink></li>
+            <li><NavLink to="/dashboard/savingsGoal">My Savings Goals</NavLink></li>
             <li><NavLink to="/dashboard/investments">Investments</NavLink></li>
             <li><NavLink to="/dashboard/reports">Reports</NavLink></li>
             <li><NavLink to="/dashboard/subscriptions">Subscriptions</NavLink></li>
@@ -212,9 +212,9 @@ const DashboardLayout: React.FC = () => {
                 <thead>
                   <tr>
                     <th>Date</th>
-                    <th>Type</th>
+                    <th>Transaction Type</th>
                     <th>Amount</th>
-                    <th>Account</th>
+                    <th>Account Name</th>
                     <th>Status</th>
                   </tr>
                 </thead>

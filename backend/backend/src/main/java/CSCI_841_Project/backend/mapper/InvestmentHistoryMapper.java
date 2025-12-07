@@ -15,6 +15,8 @@ public class InvestmentHistoryMapper {
 
         InvestmentHistoryDTO dto = new InvestmentHistoryDTO();
         dto.setHistoryId(history.getHistoryId());
+        dto.setTotalAmountInvested(history.getTotalAmountInvested());
+        dto.setAmountInvested(history.getAmountInvested());
         dto.setInvestmentId(history.getInvestment().getInvestmentId());
         dto.setCurrentValue(history.getCurrentValue());
         dto.setPerformance(history.getPerformance());
@@ -30,6 +32,8 @@ public class InvestmentHistoryMapper {
 
         InvestmentHistory history = new InvestmentHistory(); // ✅ Create instance first
         history.setInvestment(investment); // ✅ Set investment reference
+        history.setTotalAmountInvested(dto.getTotalAmountInvested());
+        history.setAmountInvested(dto.getAmountInvested());
         history.setCurrentValue(dto.getCurrentValue()); // ✅ Set current value
         history.setPerformance(dto.getPerformance()); // ✅ Set performance
         history.setRecordedAt(LocalDateTime.now()); // ✅ Set recorded timestamp

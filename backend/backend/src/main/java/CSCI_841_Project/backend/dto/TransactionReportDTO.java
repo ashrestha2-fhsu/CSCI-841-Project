@@ -1,11 +1,15 @@
 package CSCI_841_Project.backend.dto;
 
-import lombok.Builder;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class TransactionReportDTO {
     private Long userId;

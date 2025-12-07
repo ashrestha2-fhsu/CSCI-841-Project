@@ -1,12 +1,24 @@
 package CSCI_841_Project.backend.entity;
 
+
+import CSCI_841_Project.backend.enums.PaymentMethod;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.DecimalMin;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 
 @Entity
 @Table(name = "loan_payments")
@@ -28,6 +40,18 @@ public class  LoanPayment {
     @ManyToOne
     @JoinColumn(name = "loan_id", nullable = false, foreignKey = @ForeignKey(name = "fk_loan_payment_loan"))
     private Loan loan;
+
+    @ManyToOne
+    @JoinColumn(name = "account_id",
+            foreignKey = @ForeignKey(name = "fk_loan_payment_account"))
+    private Account account;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "payment_method", nullable = false, length = 32)
+    private PaymentMethod paymentMethod = PaymentMethod.INTERNAL_ACCOUNT;
+
+    @Column(name = "external_reference", length = 128)
+    private String externalReference;
 
     /**
      * Foreign Key linking the payment to a user.
@@ -124,134 +148,14 @@ public class  LoanPayment {
     }
 
 
-
-
+    // ✅ Validation: require account for methods that spend from an internal account
+    @AssertTrue(message = "Account is required when paymentMethod is INTERNAL_ACCOUNT")
+    private boolean isAccountPresentWhenRequired() {
+        if (paymentMethod == null) return true; // let other validations catch null if you want
+        return paymentMethod != PaymentMethod.INTERNAL_ACCOUNT || account != null;
+    }
 
     // Constructor
-    public LoanPayment(){}
 
-//    public void initializePayment(Loan loan, User user, BigDecimal paymentAmount) {
-//        this.loan = loan;
-//        this.user = user;
-//        this.paymentAmount = paymentAmount;
-//        this.paymentDate = LocalDateTime.now();
-//        this.remainingBalance = loan.getOutstandingBalance().subtract(paymentAmount);
-//        this.lastPaymentDate = LocalDate.now();
-//        this.nextDueDate = this.lastPaymentDate.plusMonths(1); // Next due date 1 month later
-//    }
-
-    public LoanPayment(Long paymentId, Loan loan, User user, BigDecimal paymentAmount, BigDecimal extraPayment,
-                       BigDecimal principalPaid, BigDecimal interestPaid, BigDecimal totalAmountPaid,
-                       BigDecimal remainingBalance, LocalDate lastPaymentDate, LocalDate nextDueDate, LocalDateTime paymentDate) {
-        this.paymentId = paymentId;
-        this.loan = loan;
-        this.user = user;
-        this.paymentAmount = paymentAmount;
-        this.extraPayment = extraPayment;
-        this.principalPaid = principalPaid;
-        this.interestPaid = interestPaid;
-        this.totalAmountPaid = totalAmountPaid;
-        this.remainingBalance = remainingBalance;
-        this.lastPaymentDate = lastPaymentDate;
-        this.nextDueDate = nextDueDate;
-        this.paymentDate = paymentDate;
-    }
-
-// Getter and Setter
-
-    public Long getPaymentId() {
-        return paymentId;
-    }
-
-    public void setPaymentId(Long paymentId) {
-        this.paymentId = paymentId;
-    }
-
-    public Loan getLoan() {
-        return loan;
-    }
-
-    public void setLoan(Loan loan) {
-        this.loan = loan;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public @DecimalMin(value = "0.00", message = "Payment amount cannot be negative") BigDecimal getPaymentAmount() {
-        return paymentAmount;
-    }
-
-    public void setPaymentAmount(@DecimalMin(value = "0.00", message = "Payment amount cannot be negative") BigDecimal paymentAmount) {
-        this.paymentAmount = paymentAmount;
-    }
-
-    public BigDecimal getExtraPayment() {
-        return extraPayment;
-    }
-
-    public void setExtraPayment(BigDecimal extraPayment) {
-        this.extraPayment = extraPayment;
-    }
-
-    public BigDecimal getPrincipalPaid() {
-        return principalPaid;
-    }
-
-    public void setPrincipalPaid(BigDecimal principalPaid) {
-        this.principalPaid = principalPaid;
-    }
-
-    public @DecimalMin(value = "0.00", message = "Interest paid cannot be negative") BigDecimal getInterestPaid() {
-        return interestPaid;
-    }
-
-    public void setInterestPaid(@DecimalMin(value = "0.00", message = "Interest paid cannot be negative") BigDecimal interestPaid) {
-        this.interestPaid = interestPaid;
-    }
-
-    public @DecimalMin(value = "0.00", message = "Total amount paid cannot be negative") BigDecimal getTotalAmountPaid() {
-        return totalAmountPaid;
-    }
-
-    public void setTotalAmountPaid(@DecimalMin(value = "0.00", message = "Total amount paid cannot be negative") BigDecimal totalAmountPaid) {
-        this.totalAmountPaid = totalAmountPaid;
-    }
-
-    public @DecimalMin(value = "0.00", message = "Remaining balance cannot be negative") BigDecimal getRemainingBalance() {
-        return remainingBalance;
-    }
-
-    public void setRemainingBalance(@DecimalMin(value = "0.00", message = "Remaining balance cannot be negative") BigDecimal remainingBalance) {
-        this.remainingBalance = remainingBalance;
-    }
-
-    public LocalDate getLastPaymentDate() {
-        return lastPaymentDate;
-    }
-
-    public void setLastPaymentDate(LocalDate lastPaymentDate) {
-        this.lastPaymentDate = lastPaymentDate;
-    }
-
-    public LocalDate getNextDueDate() {
-        return nextDueDate;
-    }
-
-    public void setNextDueDate(LocalDate nextDueDate) {
-        this.nextDueDate = nextDueDate;
-    }
-
-    public LocalDateTime getPaymentDate() {
-        return paymentDate;
-    }
-
-    public void setPaymentDate(LocalDateTime paymentDate) {
-        this.paymentDate = paymentDate;
-    }
+    // Getter and Setter
 }
